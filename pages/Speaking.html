@@ -1,1 +1,361 @@
-# التحدث
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارة التحدث - أكاديمية الأساتذة</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .skill-page {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .skill-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .skill-header h1 {
+            font-size: 2.5rem;
+            color: #4f46e5;
+            margin-bottom: 20px;
+        }
+        
+        .skill-level {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .exercise-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .exercise-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .exercise-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .record-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4f46e5;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- زر العودة -->
+    <a href="../index.html" class="back-btn">
+        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+    </a>
+
+    <div class="skill-page">
+        <div class="container">
+            <!-- العنوان الرئيسي -->
+            <div class="skill-header">
+                <div class="skill-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <h1>مهارة التحدث والإلقاء</h1>
+                <p class="subtitle">طور قدراتك في التواصل والتعبير بطلاقة وثقة</p>
+            </div>
+
+            <!-- اختبار المستوى -->
+            <div class="skill-level">
+                <h2><i class="fas fa-chart-line"></i> اختبار مستواك الحالي</h2>
+                <div class="level-test">
+                    <p>أجب على هذه الأسئلة لتحديد مستواك:</p>
+                    <div class="questions">
+                        <div class="question">
+                            <p>1. هل تشعر بالتوتر عند التحدث أمام مجموعة؟</p>
+                            <div class="options">
+                                <button class="option-btn" data-level="1">دائماً</button>
+                                <button class="option-btn" data-level="2">أحياناً</button>
+                                <button class="option-btn" data-level="3">نادراً</button>
+                                <button class="option-btn" data-level="4">أبداً</button>
+                            </div>
+                        </div>
+                        <!-- يمكن إضافة المزيد من الأسئلة -->
+                    </div>
+                    <button id="calculateLevel" class="btn primary">احسب مستواي</button>
+                    <div id="levelResult" style="display: none; margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px;"></div>
+                </div>
+            </div>
+
+            <!-- التمارين العملية -->
+            <div class="exercises-section">
+                <h2><i class="fas fa-dumbbell"></i> تمارين عملية</h2>
+                <div class="exercises-grid">
+                    
+                    <!-- تمرين 1: التسجيل الصوتي -->
+                    <div class="exercise-card">
+                        <div class="exercise-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h3>التسجيل الصوتي</h3>
+                        <p>سجل صوتك وأنت تشرح درساً، ثم استمع للتسجيل وحلل أداءك</p>
+                        <div class="timer" id="recordingTimer">02:00</div>
+                        <button class="record-btn" id="recordBtn">
+                            <i class="fas fa-circle"></i> ابدأ التسجيل
+                        </button>
+                        <div id="recordingStatus" style="margin-top: 10px; color: #666;"></div>
+                    </div>
+
+                    <!-- تمرين 2: التحدث أمام المرآة -->
+                    <div class="exercise-card">
+                        <div class="exercise-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>التحدث أمام المرآة</h3>
+                        <p>تمرن على الشرح أمام المرآة وراقب لغة جسدك وتعبيرات وجهك</p>
+                        <ul>
+                            <li>💡 اختر موضوعاً تعليمياً</li>
+                            <li>⏱️ تحدث لمدة 3 دقائق</li>
+                            <li>📝 لاحظ نقاط القوة والضعف</li>
+                        </ul>
+                        <button class="btn primary start-mirror">ابدأ التمرين</button>
+                    </div>
+
+                    <!-- تمرين 3: القراءة بصوت عالٍ -->
+                    <div class="exercise-card">
+                        <div class="exercise-icon">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <h3>القراءة الجهرية</h3>
+                        <p>اقرأ النص التالي بصوت واضح مع التركيز على النطق الصحيح:</p>
+                        <div class="reading-text">
+                            <p>"التعليم ليس ملء دلو، بل إشعال شعلة. المعلم الناجح هو من يلهم طلابه للبحث والمعرفة، لا من يحشو أذهانهم بالمعلومات."</p>
+                        </div>
+                        <button class="btn secondary read-aloud">اقرأ الآن</button>
+                    </div>
+
+                    <!-- تمرين 4: التلخيص الشفهي -->
+                    <div class="exercise-card">
+                        <div class="exercise-icon">
+                            <i class="fas fa-comment-alt"></i>
+                        </div>
+                        <h3>التلخيص الشفهي</h3>
+                        <p>استمع للمقطع ثم لخصه شفهياً بكلماتك:</p>
+                        <audio controls style="width: 100%; margin: 10px 0;">
+                            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                            المتصفح لا يدعم تشغيل الصوت
+                        </audio>
+                        <button class="btn primary start-summary">ابدأ التلخيص</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- نصائح سريعة -->
+            <div class="quick-tips" style="margin-top: 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h2><i class="fas fa-lightbulb"></i> نصائح سريعة للتحسين</h2>
+                <div class="tips-grid">
+                    <div class="tip">
+                        <i class="fas fa-volume-up" style="color: #4f46e5;"></i>
+                        <h4>تحسين النطق</h4>
+                        <p>تدرب على الكلمات الصعبة ببطء ثم زد السرعة تدريجياً</p>
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-hand-peace" style="color: #10b981;"></i>
+                        <h4>لغة الجسد</h4>
+                        <p>استخدم إيماءات اليدين وتعبيرات الوجه المناسبة</p>
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-pause-circle" style="color: #f59e0b;"></i>
+                        <h4>التوقف المؤقت</h4>
+                        <p>خذ وقفات قصيرة لجذب الانتباه وإعطاء وقت للتفكير</p>
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-smile" style="color: #ef4444;"></i>
+                        <h4>الابتسامة</h4>
+                        <p>الابتسامة تزيد الثقة وتجعل المستمعين أكثر تفاعلاً</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التقدم -->
+            <div class="progress-section" style="margin-top: 50px;">
+                <h2><i class="fas fa-chart-line"></i> تقدمك في مهارة التحدث</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%;"></div>
+                </div>
+                <p>أكمل 3 تمارين أخرى لترتقي للمستوى التالي!</p>
+                <button class="btn primary" onclick="saveProgress()">حفظ التقدم</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // تسجيل الصوت
+        let mediaRecorder;
+        let audioChunks = [];
+        
+        document.getElementById('recordBtn').addEventListener('click', async function() {
+            const btn = this;
+            const timer = document.getElementById('recordingTimer');
+            const status = document.getElementById('recordingStatus');
+            
+            if (btn.innerHTML.includes('ابدأ')) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // هنا يمكن رفع الملف للخادم أو حفظه محلياً
+                        status.innerHTML = `✅ تم التسجيل! <a href="${audioUrl}" download="تسجيلي.wav">حمّل التسجيل</a>`;
+                        status.style.color = 'green';
+                        
+                        // حفظ التقدم
+                        localStorage.setItem('speaking_exercise_1', 'completed');
+                        updateProgress();
+                    };
+                    
+                    // بدء التسجيل
+                    mediaRecorder.start();
+                    btn.innerHTML = '<i class="fas fa-stop"></i> أوقف التسجيل';
+                    status.innerHTML = '🎤 جاري التسجيل...';
+                    status.style.color = 'blue';
+                    
+                    // عدّاد تنازلي
+                    let timeLeft = 120;
+                    const countdown = setInterval(() => {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(countdown);
+                            mediaRecorder.stop();
+                            btn.innerHTML = '<i class="fas fa-circle"></i> ابدأ التسجيل';
+                        }
+                        timeLeft--;
+                    }, 1000);
+                    
+                } catch (err) {
+                    status.innerHTML = '❌ خطأ في الوصول للميكروفون';
+                    status.style.color = 'red';
+                }
+            } else {
+                mediaRecorder.stop();
+                btn.innerHTML = '<i class="fas fa-circle"></i> ابدأ التسجيل';
+            }
+        });
+        
+        // اختبار المستوى
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                this.style.background = '#4f46e5';
+                this.style.color = 'white';
+            });
+        });
+        
+        document.getElementById('calculateLevel').addEventListener('click', function() {
+            const selected = document.querySelector('.option-btn.selected');
+            if (selected) {
+                const level = selected.dataset.level;
+                const levels = {
+                    '1': 'مبتدئ - تحتاج لممارسة أكثر',
+                    '2': 'متوسط - لديك أساس جيد',
+                    '3': 'متقدم - ممتاز!',
+                    '4': 'متميز - يمكنك تدريب الآخرين'
+                };
+                
+                document.getElementById('levelResult').innerHTML = `
+                    <h4>🎯 مستواك: ${level}/4</h4>
+                    <p>${levels[level]}</p>
+                    <p>نوصي بـ 3 تمارين أسبوعياً للتحسين</p>
+                `;
+                document.getElementById('levelResult').style.display = 'block';
+            }
+        });
+        
+        // التقدم
+        function updateProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            const completed = Object.keys(localStorage).filter(key => key.includes('speaking_exercise')).length;
+            const progress = (completed / 10) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+        
+        function saveProgress() {
+            localStorage.setItem('speaking_last_practice', new Date().toISOString());
+            alert('✅ تم حفظ تقدمك!');
+            updateProgress();
+        }
+        
+        // تهيئة عند التحميل
+        document.addEventListener('DOMContentLoaded', updateProgress);
+    </script>
+</body>
+</html>
