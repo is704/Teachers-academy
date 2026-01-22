@@ -1,67 +1,49 @@
-name: Build and Deploy Teacher's Academy
+name: Deploy to GitHub Pages
 
 on:
+  # تشغيل عند الدفع للفرع الرئيسي
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: ["main"]
+  
+  # تشغيل يدوياً من صفحة Actions
+  workflow_dispatch:
 
-env:
-  NODE_VERSION: '18'
+# الصلاحيات المطلوبة
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# السماح بتشغيل واحد فقط في الوقت نفسه
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: جلب الكود
-      uses: actions/checkout@v4
-    
-    - name: التحقق من الملفات
-      run: |
-        echo "📁 الملفات الموجودة:"
-        ls -la
-        echo ""
-        echo "✅ ملف index.html موجود؟"
-        if [ -f "index.html" ]; then
-          echo "نعم ✓"
-        else
-          echo "لا ✗ - سيتم إنشاؤه تلقائياً"
-          echo '<!DOCTYPE html><html><head><title>أكاديمية الأساتذة</title></head><body><h1>مرحباً!</h1></body></html>' > index.html
-        fi
-    
-    - name: اختبار HTML
-      run: |
-        echo "🔍 فحص ملف HTML..."
-        if [ -f "index.html" ]; then
-          echo "الموقع جاهز للنشر ✓"
-          echo "📊 حجم الموقع:"
-          du -sh .
-        else
-          echo "❌ خطأ: لا يوجد index.html"
-          exit 1
-        fi
-    
-    - name: أرشيف للتحميل
-      uses: actions/upload-artifact@v4
-      with:
-        name: website-files
-        path: .
-  
+  # مهمة النشر
   deploy:
-    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     
     steps:
-    - name: جلب الأرشيف
-      uses: actions/download-artifact@v4
-      with:
-        name: website-files
-    
-    - name: النشر على GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
-        force_orphan: true
+      # 1. جلب الكود
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # 2. إعداد Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      # 3. رفع الملفات للنشر
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'  # نشر كل الملفات
+      
+      # 4. النشر
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
