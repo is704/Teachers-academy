@@ -1,144 +1,152 @@
-// مساعد الذكاء الاصطناعي للتعليم
-class AITeachingAssistant {
+// مساعد ذكي متطور مع ردود واقعية
+const AI_RESPONSES = {
+    // الردود العامة
+    greeting: [
+        "مرحباً! أنا مساعدك الذكي في تطوير مهارات التدريس. أسألني عن أي شيء: مهارات التحدث، القراءة، الاستماع، أو الكتابة.",
+        "أهلاً وسهلاً! أنا هنا لأرشدك في رحلتك لتصبح معلماً متميزاً. كيف يمكنني مساعدتك اليوم؟",
+        "مرحباً بك في أكاديمية الأساتذة! أنا المساعد الذكي، جاهز للإجابة على استفساراتك التعليمية."
+    ],
+    
+    // مهارة التحدث
+    speaking: [
+        "💬 **لتطوير مهارة التحدث:**\n1. تدرب على الشرح أمام المرآة 10 دقائق يومياً\n2. سجل صوتك وأنت تشرح درساً\n3. انضم لغرف المحادثة التفاعلية في قسم المجتمع\n4. استخدم تقنية 'التكرار' لتثبيت المصطلحات",
+        "🎤 **نصائح للتحدث بطلاقة:**\n• خذ نفساً عميقاً قبل البدء\n• تحدث ببطء ووضوح\n• استخدم أمثلة واقعية\n• اطلب التغذية الراجعة من الزملاء",
+        "📱 **تمرين عملي:**\nاشرح مفهوم 'الكسور' لمدة 3 دقائق كما لو أنك أمام طلاب. سجل نفسك وحلل الأداء."
+    ],
+    
+    // مهارة القراءة
+    reading: [
+        "📚 **تطوير مهارة القراءة:**\n1. اقرأ بصوت عالٍ لتحسين النطق\n2. استخدم تقنية SQ3R (استطلع، اسأل، اقرأ، راجع، تذكر)\n3. خذ ملاحظات أثناء القراءة\n4. ناقش ما قرأته مع الآخرين",
+        "🔍 **للفهم العميق:**\n• اقرأ الفقرة مرة بسرعة\n• حدد الأفكار الرئيسية\n• ابحث عن الكلمات الجديدة\n• لخص كل قسم بكلماتك",
+        "📖 **تمرين:**\nاقرأ مقالاً تعليمياً، ثم اشرحه لشخص آخر كما لو كنت تدرسه."
+    ],
+    
+    // مهارة الاستماع
+    listening: [
+        "👂 **تحسين الاستماع:**\n1. استمع لتسجيلات تعليمية مختلفة\n2. لخص ما سمعته بعد كل جلسة\n3. تدرب على التمييز بين الأصوات\n4. مارس الاستماع النشط (أسئلة، تعليقات)",
+        "🎧 **نصائح:**\n• ركز على المتحدث\n• احتفظ بمفكرة للملاحظات\n• اسأل نفسك: ماذا فهمت؟\n• تدرب على الاستماع بدون تشتيت",
+        "📼 **تمرين:**\nاستمع لمحاضرة على اليوتيوب، ثم اكتب 5 نقاط رئيسية فهمتها."
+    ],
+    
+    // مهارة الكتابة
+    writing: [
+        "✍️ **تطوير الكتابة:**\n1. اكتب يومياً ولو فقرة واحدة\n2. استخدم قوالب جاهزة للخطط الدراسية\n3. راجع ما كتبته بعد يوم\n4. اطلب التصحيح من المساعد الذكي",
+        "📝 **نصائح للأسلوب:**\n• ابدأ بالعنوان الجذاب\n• استخدم فقرات قصيرة\n• رتب الأفكار منطقياً\n• ختم بخلاصة أو سؤال",
+        "📄 **تمرين:**\nاكتب خطة درس لموضوع 'دورة الماء في الطبيعة' لمدة 45 دقيقة."
+    ],
+    
+    // تقنيات التدريس
+    teaching: [
+        "👨‍🏫 **تقنيات التدريس الفعال:**\n• التعلم التعاوني\n• التعليم القائم على المشاريع\n• استخدام الوسائل البصرية\n• التغذية الراجعة الفورية",
+        "🏫 **إدارة الصف:**\n• وضع قواعد واضحة\n• تنويع الأنشطة\n• تشجيع المشاركة\n• تقييم مستمر",
+        "🎯 **نصائح للمعلم الجديد:**\n1. كن متحمساً\n2. تعرف على طلابك\n3. كن مرناً\n4. تعلم من الأخطاء\n5. استمر في التطور"
+    ],
+    
+    // الردود العامة
+    default: [
+        "هذا سؤال ممتاز! هل تريدني أن أعطيك أمثلة عملية أو تمريناً مباشراً؟",
+        "أستطيع مساعدتك في هذا. هل يمكنك توضيح مستواك الحالي في هذه المهارة؟",
+        "لدي عدة اقتراحات لهذا الموضوع. أي جانب تريد التركيز عليه؟"
+    ]
+};
+
+// المساعد الذكي المحسن
+class EnhancedAIAssistant {
     constructor() {
-        this.responses = {
-            greetings: [
-                "مرحباً! أنا مساعدك الذكي لتعلم مهارات التدريس. كيف يمكنني مساعدتك اليوم؟",
-                "أهلاً وسهلاً! أنا هنا لأرشدك في رحلة تطوير مهاراتك التدريسية.",
-                "مرحباً بك في أكاديمية الأساتذة! أنا المعلم الذكي جاهز للإجابة على استفساراتك."
-            ],
-            speaking: [
-                "لتطوير مهارة التحدث: ابدأ بالتحدث مع نفسك أمام المرآة، ثم انضم لغرف المحادثة التفاعلية.",
-                "نصيحتي للتحدث: تدرب على شرح مفهوم واحد يومياً لمدة 5 دقائق.",
-                "جرب تسجيل صوتك وأنت تشرح درساً، ثم استمع للتسجيل وحلل أداءك."
-            ],
-            writing: [
-                "لتحسين الكتابة: اكتب يومياً فقرة عن موضوع تعليمي، ثم اطلب من المساعد تصحيحها.",
-                "استخدم قوالب الخطط الدراسية الجاهزة، ثم عدل عليها تدريجياً.",
-                "نصيحة: اقرأ ما تكتبه بصوت عالٍ لتكتشف الأخطاء بنفسك."
-            ],
-            reading: [
-                "لتطوير القراءة: ابدأ بنصوص قصيرة، ثم زد الطول تدريجياً.",
-                "استخدم تقنية القراءة السريعة: اقرأ أول وآخر جملة في كل فقرة.",
-                "مارس القراءة الناقدة: اطرح أسئلة أثناء القراءة وحاول الإجابة عليها."
-            ],
-            listening: [
-                "لتحسين الاستماع: استمع لتسجيلات تعليمية ثم لخص ما سمعته.",
-                "جرب: استمع لمقطع صوتي مرة واحدة فقط ثم حاول إعادة صياغته.",
-                "نصيحة: ركز على الكلمات المفتاحية أثناء الاستماع."
-            ],
-            default: [
-                "هذا سؤال رائع! دعني أفكر في أفضل طريقة لمساعدتك...",
-                "أعتقد أن السؤال يحتاج لبعض التفصيل. هل يمكنك توضيح أكثر؟",
-                "لدي عدة اقتراحات لهذا الموضوع. أيهما تفضل أن نبدأ به؟"
-            ]
-        };
+        this.conversationHistory = [];
     }
-
-    // تحليل السؤال وتحديد الفئة
-    analyzeQuestion(question) {
-        const lowerQuestion = question.toLowerCase();
+    
+    getResponse(userInput) {
+        const input = userInput.toLowerCase();
         
-        if (lowerQuestion.includes('تحدث') || lowerQuestion.includes('كلام') || lowerQuestion.includes('محادثة')) {
-            return 'speaking';
-        } else if (lowerQuestion.includes('كتابة') || lowerQuestion.includes('يكتب') || lowerQuestion.includes('كتب')) {
-            return 'writing';
-        } else if (lowerQuestion.includes('قراءة') || lowerQuestion.includes('يقرأ') || lowerQuestion.includes('اقرأ')) {
-            return 'reading';
-        } else if (lowerQuestion.includes('استماع') || lowerQuestion.includes('يسمع') || lowerQuestion.includes('اسمع')) {
-            return 'listening';
-        } else if (lowerQuestion.includes('مرحبا') || lowerQuestion.includes('اهلا') || lowerQuestion.includes('سلام')) {
-            return 'greetings';
-        } else {
-            return 'default';
+        // تصنيف السؤال
+        let category = 'default';
+        
+        if (input.includes('تحدث') || input.includes('كلام') || input.includes('شرح') || input.includes('محادثة')) {
+            category = 'speaking';
+        } else if (input.includes('كتابة') || input.includes('يكتب') || input.includes('كتب') || input.includes('اكتب')) {
+            category = 'writing';
+        } else if (input.includes('قراءة') || input.includes('يقرأ') || input.includes('اقرأ') || input.includes('مقروء')) {
+            category = 'reading';
+        } else if (input.includes('استماع') || input.includes('يسمع') || input.includes('اسمع') || input.includes('سمع')) {
+            category = 'listening';
+        } else if (input.includes('تدريس') || input.includes('معلم') || input.includes('درس') || input.includes('تعليم')) {
+            category = 'teaching';
+        } else if (input.includes('مرحبا') || input.includes('اهلا') || input.includes('سلام') || input.includes('السلام')) {
+            category = 'greeting';
         }
-    }
-
-    // توليد رد
-    generateResponse(question) {
-        const category = this.analyzeQuestion(question);
-        const responses = this.responses[category];
+        
+        // اختيار رد عشوائي من الفئة
+        const responses = AI_RESPONSES[category] || AI_RESPONSES.default;
         const randomIndex = Math.floor(Math.random() * responses.length);
+        const response = responses[randomIndex];
         
-        // محاكاة تفكير الذكاء الاصطناعي
-        setTimeout(() => {
-            return responses[randomIndex];
-        }, 1000 + Math.random() * 2000);
+        // حفظ المحادثة
+        this.conversationHistory.push({
+            user: userInput,
+            ai: response,
+            time: new Date().toISOString()
+        });
         
-        return responses[randomIndex];
+        // حفظ في localStorage
+        this.saveConversation();
+        
+        return response;
     }
-
-    // تصحيح النص
-    async correctText(text) {
-        // محاكاة تصحيح النص
-        const corrections = {
-            common: {
-                'انشاء': 'إنشاء',
-                'هاذا': 'هذا',
-                'الذى': 'الذي',
-                'اثناء': 'أثناء',
-                'يئتي': 'يأتي'
-            }
-        };
-
-        let correctedText = text;
-        let suggestions = [];
-
-        // البحث عن الأخطاء الشائعة
-        for (const [wrong, correct] of Object.entries(corrections.common)) {
-            if (text.includes(wrong)) {
-                correctedText = correctedText.replace(new RegExp(wrong, 'g'), correct);
-                suggestions.push(`صححت "${wrong}" إلى "${correct}"`);
-            }
+    
+    saveConversation() {
+        if (this.conversationHistory.length > 50) {
+            this.conversationHistory = this.conversationHistory.slice(-50);
         }
-
-        // تحليل الأسلوب
-        const words = text.split(' ').length;
-        const sentences = text.split(/[.!؟]/).filter(s => s.trim()).length;
-        
-        if (words / sentences > 25) {
-            suggestions.push("الجمل طويلة جداً. حاول تقسيمها إلى جمل أقصر.");
+        localStorage.setItem('ai_conversation', JSON.stringify(this.conversationHistory));
+    }
+    
+    loadConversation() {
+        const saved = localStorage.getItem('ai_conversation');
+        if (saved) {
+            this.conversationHistory = JSON.parse(saved);
         }
-
-        if (words < 50) {
-            suggestions.push("النص قصير. حاول إضافة تفاصيل أكثر.");
-        }
-
-        return {
-            correctedText,
-            suggestions,
-            stats: {
-                words,
-                sentences,
-                readability: words / sentences
-            }
-        };
     }
 }
 
-// تهيئة المساعد الذكي
-const aiAssistant = new AITeachingAssistant();
+// تهيئة المساعد
+const aiAssistant = new EnhancedAIAssistant();
+aiAssistant.loadConversation();
 
-// الدردشة مع الذكاء الاصطناعي
+// تحديث دالة المحادثة
 document.addEventListener('DOMContentLoaded', function() {
     const aiInput = document.getElementById('aiInput');
     const sendButton = document.getElementById('sendAiMessage');
     const aiMessages = document.getElementById('aiMessages');
-
-    function addMessage(text, isUser = false) {
+    
+    // إضافة رسائل سابقة
+    aiAssistant.conversationHistory.forEach(msg => {
+        addMessageToChat(msg.user, true);
+        addMessageToChat(msg.ai, false);
+    });
+    
+    // إضافة رسالة ترحيبية إذا لم توجد محادثة
+    if (aiAssistant.conversationHistory.length === 0) {
+        setTimeout(() => {
+            addMessageToChat(AI_RESPONSES.greeting[0], false);
+        }, 500);
+    }
+    
+    function addMessageToChat(text, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
         
+        // معالجة النصوص متعددة الأسطر
+        const formattedText = text.replace(/\n/g, '<br>');
+        
         const content = document.createElement('div');
         content.className = 'message-content';
-        content.textContent = text;
+        content.innerHTML = formattedText;
         
         const time = document.createElement('div');
         time.className = 'message-time';
-        time.textContent = new Date().toLocaleTimeString('ar-EG', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
+        const now = new Date();
+        time.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
         
         messageDiv.appendChild(content);
         messageDiv.appendChild(time);
@@ -147,71 +155,114 @@ document.addEventListener('DOMContentLoaded', function() {
         // التمرير لأسفل
         aiMessages.scrollTop = aiMessages.scrollHeight;
     }
-
+    
     function sendMessage() {
         const message = aiInput.value.trim();
         if (!message) return;
-
-        // إضافة رسالة المستخدم
-        addMessage(message, true);
         
-        // مسح حقل الإدخال
+        // إضافة رسالة المستخدم
+        addMessageToChat(message, true);
         aiInput.value = '';
         
-        // محاكاة التفكير
-        const thinking = document.createElement('div');
-        thinking.className = 'message ai-message';
-        thinking.innerHTML = '<div class="message-content"><i class="fas fa-spinner fa-spin"></i> يفكر...</div>';
-        aiMessages.appendChild(thinking);
+        // إظهار مؤشر التفكير
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'message ai-message thinking';
+        thinkingDiv.innerHTML = `
+            <div class="message-content">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        `;
+        aiMessages.appendChild(thinkingDiv);
         
-        // إضافة رد الذكاء الاصطناعي بعد تأخير
+        // محاكاة التفكير ثم الرد
         setTimeout(() => {
-            aiMessages.removeChild(thinking);
-            const response = aiAssistant.generateResponse(message);
-            addMessage(response, false);
-        }, 1500);
+            aiMessages.removeChild(thinkingDiv);
+            const response = aiAssistant.getResponse(message);
+            addMessageToChat(response, false);
+        }, 1000 + Math.random() * 1000);
     }
-
-    // إرسال بالزر
-    sendButton.addEventListener('click', sendMessage);
     
-    // إرسال بـ Enter
+    // إرسال الرسائل
+    sendButton.addEventListener('click', sendMessage);
     aiInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             sendMessage();
         }
     });
+    
+    // إضافة أزرار سريعة للأسئلة الشائعة
+    setupQuickQuestions();
 });
 
-// وظيفة السؤال السريع
-window.askAI = function(question) {
-    const aiInput = document.getElementById('aiInput');
-    aiInput.value = question;
-    document.getElementById('sendAiMessage').click();
-};
-
-// فتح المنتدى
-window.openForum = function() {
-    alert('سيتم فتح منتدى النقاش قريباً. هذه ميزة قيد التطوير.');
-};
-
-// الانضمام لغرفة محادثة
-window.joinChatRoom = function() {
-    const rooms = ['غرفة المبتدئين', 'غرفة المتوسطين', 'غرفة المتقدمين'];
-    const selected = prompt(`اختر غرفة:\n${rooms.join('\n')}`);
-    if (selected) {
-        alert(`أنت الآن في ${selected}. استعد للمحادثة!`);
-    }
-};
-
-// إيجاد شريك
-window.findPartner = function() {
-    const partners = [
-        { name: 'أحمد', level: 'متوسط', interests: ['اللغة العربية', 'الرياضيات'] },
-        { name: 'سارة', level: 'مبتدئ', interests: ['العلوم', 'اللغات'] },
-        { name: 'محمد', level: 'متقدم', interests: ['التاريخ', 'التربية'] }
+// أزرار الأسئلة السريعة
+function setupQuickQuestions() {
+    const quickQuestions = [
+        { text: "كيف أطور مهارة التحدث؟", emoji: "💬" },
+        { text: "أعطني تمرين كتابة", emoji: "✍️" },
+        { text: "نصائح للقراءة السريعة", emoji: "📚" },
+        { text: "كيف أكون معلمًا ناجحًا؟", emoji: "👨‍🏫" }
     ];
     
-    const partner = partners[Math.floor(Math.random() * partners.length)];
-    alert(`وجدنا لك شريكاً:\nالاسم: ${partner.name}\nالمستوى: ${partner.level}\nالاهتمامات: ${partner.interests.join(', ')}`);
-};
+    const container = document.querySelector('.ai-quick-actions');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    quickQuestions.forEach(q => {
+        const button = document.createElement('button');
+        button.className = 'quick-btn';
+        button.innerHTML = `${q.emoji} ${q.text}`;
+        button.onclick = () => {
+            document.getElementById('aiInput').value = q.text;
+            document.getElementById('sendAiMessage').click();
+        };
+        container.appendChild(button);
+    });
+}
+
+// أنماط إضافية للدردشة
+const style = document.createElement('style');
+style.textContent = `
+    .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 10px;
+    }
+    
+    .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        background: #666;
+        border-radius: 50%;
+        animation: typing 1s infinite ease-in-out;
+    }
+    
+    .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+    
+    .quick-btn {
+        margin: 5px;
+        padding: 10px 15px;
+        background: #e3f2fd;
+        border: 1px solid #bbdefb;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .quick-btn:hover {
+        background: #bbdefb;
+        transform: translateY(-2px);
+    }
+`;
+document.head.appendChild(style);
