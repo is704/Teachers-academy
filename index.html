@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكاديمية تطوير مهارات الأساتذة</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>أكاديمية الأساتذة</span>
+            </a>
+            <div class="nav-links">
+                <a href="#home" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="#skills"><i class="fas fa-brain"></i> المهارات</a>
+                <a href="#community"><i class="fas fa-users"></i> المجتمع</a>
+                <a href="#ai-tutor"><i class="fas fa-robot"></i> المساعد الذكي</a>
+                <a href="#progress"><i class="fas fa-chart-line"></i> تقدمي</a>
+            </div>
+            <button class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- قسم البطل -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>طور مهاراتك التدريسية مع الذكاء الاصطناعي</h1>
+                <p class="subtitle">منصة متكاملة لتطوير مهارات التحدث، القراءة، الاستماع، والكتابة للأساتذة الطموحين</p>
+                <div class="cta-buttons">
+                    <a href="#skills" class="btn primary">
+                        <i class="fas fa-play-circle"></i> ابدأ رحلتك
+                    </a>
+                    <a href="#community" class="btn secondary">
+                        <i class="fas fa-users"></i> انضم للمجتمع
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="مدرس">
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المهارات الأربع -->
+    <section class="skills-section" id="skills">
+        <div class="container">
+            <h2 class="section-title">المهارات الأساسية للأساتذة</h2>
+            <div class="skills-grid">
+                <!-- مهارة التحدث -->
+                <div class="skill-card" onclick="window.location.href='pages/speaking.html'">
+                    <div class="skill-icon speaking">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h3>مهارة التحدث</h3>
+                    <p>طور قدراتك في التعبير والتواصل الفعال مع الطلاب</p>
+                    <ul class="skill-features">
+                        <li><i class="fas fa-check"></i> غرف محادثة تفاعلية</li>
+                        <li><i class="fas fa-check"></i> تسجيل وتقييم النطق</li>
+                        <li><i class="fas fa-check"></i> تمارين التحدث أمام الجمهور</li>
+                    </ul>
+                    <button class="skill-btn">ابدأ التمرين</button>
+                </div>
+
+                <!-- مهارة القراءة -->
+                <div class="skill-card" onclick="window.location.href='pages/reading.html'">
+                    <div class="skill-icon reading">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>مهارة القراءة</h3>
+                    <p>تعلم تقنيات القراءة السريعة والفهم العميق</p>
+                    <ul class="skill-features">
+                        <li><i class="fas fa-check"></i> مكتبة نصوص تعليمية</li>
+                        <li><i class="fas fa-check"></i> تمارين فهم المقروء</li>
+                        <li><i class="fas fa-check"></i> تحليل النصوص مع الذكاء الاصطناعي</li>
+                    </ul>
+                    <button class="skill-btn">استعرض المكتبة</button>
+                </div>
+
+                <!-- مهارة الاستماع -->
+                <div class="skill-card" onclick="window.location.href='pages/listening.html'">
+                    <div class="skill-icon listening">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3>مهارة الاستماع</h3>
+                    <p>حسن قدرتك على الاستماع الفعال والاستيعاب</p>
+                    <ul class="skill-features">
+                        <li><i class="fas fa-check"></i> تسجيلات صوتية تعليمية</li>
+                        <li><i class="fas fa-check"></i> اختبارات الاستماع التفاعلية</li>
+                        <li><i class="fas fa-check"></i> تقييم مهارات الفهم السمعي</li>
+                    </ul>
+                    <button class="skill-btn">استمع الآن</button>
+                </div>
+
+                <!-- مهارة الكتابة -->
+                <div class="skill-card" onclick="window.location.href='pages/writing.html'">
+                    <div class="skill-icon writing">
+                        <i class="fas fa-pen-fancy"></i>
+                    </div>
+                    <h3>مهارة الكتابة</h3>
+                    <p>احترف كتابة الخطط الدراسية والتقارير</p>
+                    <ul class="skill-features">
+                        <li><i class="fas fa-check"></i> تصحيح آلي للكتابة</li>
+                        <li><i class="fas fa-check"></i> قوالب جاهزة للخطط الدراسية</li>
+                        <li><i class="fas fa-check"></i> نصائح لتحسين الأسلوب</li>
+                    </ul>
+                    <button class="skill-btn">اكتب الآن</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- مساعد الذكاء الاصطناعي -->
+    <section class="ai-section" id="ai-tutor">
+        <div class="container">
+            <h2 class="section-title">مساعد الذكاء الاصطناعي الشخصي</h2>
+            <div class="ai-container">
+                <div class="ai-chat-box">
+                    <div class="ai-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="ai-info">
+                            <h3>المعلم الذكي</h3>
+                            <p>متصل · جاهز للمساعدة</p>
+                        </div>
+                    </div>
+                    <div class="ai-messages" id="aiMessages">
+                        <div class="message ai-message">
+                            <div class="message-content">
+                                مرحباً! أنا مساعدك الذكي لتعلم مهارات التدريس. كيف يمكنني مساعدتك اليوم؟
+                            </div>
+                            <div class="message-time">الآن</div>
+                        </div>
+                    </div>
+                    <div class="ai-input">
+                        <input type="text" id="aiInput" placeholder="اسألني عن أي شيء في التدريس...">
+                        <button id="sendAiMessage">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="ai-features">
+                    <h3>مميزات المساعد الذكي:</h3>
+                    <ul>
+                        <li><i class="fas fa-magic"></i> تصحيح الأخطاء اللغوية فورياً</li>
+                        <li><i class="fas fa-lightbulb"></i> اقتراح تحسينات للأسلوب</li>
+                        <li><i class="fas fa-chart-bar"></i> تحليل نقاط القوة والضعف</li>
+                        <li><i class="fas fa-graduation-cap"></i> توفير مصادر تعليمية مخصصة</li>
+                    </ul>
+                    <div class="ai-quick-actions">
+                        <button class="quick-btn" onclick="askAI('كيف أطور مهارة التحدث؟')">
+                            <i class="fas fa-microphone"></i> تطوير التحدث
+                        </button>
+                        <button class="quick-btn" onclick="askAI('أعطني تمرين كتابة')">
+                            <i class="fas fa-pen"></i> تمرين كتابة
+                        </button>
+                        <button class="quick-btn" onclick="askAI('صحح لي هذه الجملة')">
+                            <i class="fas fa-check-circle"></i> تصحيح فوري
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- مجتمع التعلم -->
+    <section class="community-section" id="community">
+        <div class="container">
+            <h2 class="section-title">مجتمع المتعلمين</h2>
+            <div class="community-grid">
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>منتدى النقاش</h3>
+                    <p>ناقش تجاربك وتعلم من الآخرين</p>
+                    <div class="community-stats">
+                        <span><i class="fas fa-users"></i> 245 متعلم نشط</span>
+                        <span><i class="fas fa-comment"></i> 1,245 مناقشة</span>
+                    </div>
+                    <button class="community-btn" onclick="openForum()">انضم للنقاش</button>
+                </div>
+
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>غرف المحادثة</h3>
+                    <p>تدرب على التحدث مباشرة مع زملائك</p>
+                    <div class="community-stats">
+                        <span><i class="fas fa-clock"></i> جلسات مباشرة يومياً</span>
+                        <span><i class="fas fa-language"></i> ممارسة اللغة العربية</span>
+                    </div>
+                    <button class="community-btn" onclick="joinChatRoom()">ادخل غرفة محادثة</button>
+                </div>
+
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>شركاء التدريب</h3>
+                    <p>جد شريكاً لممارسة المهارات معاً</p>
+                    <div class="community-stats">
+                        <span><i class="fas fa-search"></i> بحث عن شركاء</span>
+                        <span><i class="fas fa-calendar"></i> جدولة جلسات</span>
+                    </div>
+                    <button class="community-btn" onclick="findPartner()">ابحث عن شريك</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- متتبع التقدم -->
+    <section class="progress-section" id="progress">
+        <div class="container">
+            <h2 class="section-title">تتبع تقدمك التعليمي</h2>
+            <div class="progress-container">
+                <div class="progress-chart">
+                    <canvas id="progressChart"></canvas>
+                </div>
+                <div class="progress-details">
+                    <h3>إحصائيات تقدمك</h3>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>التحدث</h4>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: 65%"></div>
+                                </div>
+                                <span class="stat-percent">65%</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>القراءة</h4>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: 80%"></div>
+                                </div>
+                                <span class="stat-percent">80%</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-headphones"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>الاستماع</h4>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: 75%"></div>
+                                </div>
+                                <span class="stat-percent">75%</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-pen"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>الكتابة</h4>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: 60%"></div>
+                                </div>
+                                <span class="stat-percent">60%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn primary" onclick="viewDetailedProgress()">
+                        <i class="fas fa-chart-line"></i> عرض التقرير الكامل
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>أكاديمية الأساتذة</h3>
+                    <p>نطور معاً جيلاً من المعلمين المتميزين</p>
+                </div>
+                <div class="footer-links">
+                    <h4>روابط سريعة</h4>
+                    <a href="#skills">المهارات</a>
+                    <a href="#community">المجتمع</a>
+                    <a href="#ai-tutor">المساعد الذكي</a>
+                    <a href="#progress">تتبع التقدم</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>تواصل معنا</h4>
+                    <p><i class="fas fa-envelope"></i> info@teachers-academy.com</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 أكاديمية تطوير مهارات الأساتذة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="ai-assistant/ai-chat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
