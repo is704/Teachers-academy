@@ -1,187 +1,242 @@
-// متتبع التقدم التعليمي
-class ProgressTracker {
+// نظام التقدم والمكافآت
+class ProgressSystem {
     constructor() {
-        this.progress = JSON.parse(localStorage.getItem('teachingProgress')) || {
-            speaking: { level: 1, exercises: 0, hours: 0 },
-            reading: { level: 1, exercises: 0, hours: 0 },
-            listening: { level: 1, exercises: 0, hours: 0 },
-            writing: { level: 1, exercises: 0, hours: 0 }
+        this.progress = JSON.parse(localStorage.getItem('teacher_progress')) || {
+            speaking: { exercises: 0, level: 1 },
+            reading: { exercises: 0, level: 1 },
+            listening: { exercises: 0, level: 1 },
+            writing: { exercises: 0, level: 1 },
+            achievements: [],
+            points: 0
         };
     }
-
-    // تحديث التقدم
-    updateProgress(skill, exerciseCount = 1, hours = 0.5) {
-        this.progress[skill].exercises += exerciseCount;
-        this.progress[skill].hours += hours;
+    
+    completeExercise(skill) {
+        this.progress[skill].exercises++;
         
         // ترقية المستوى
-        if (this.progress[skill].exercises >= 10) {
-            this.progress[skill].level = 2;
-        }
-        if (this.progress[skill].exercises >= 25) {
-            this.progress[skill].level = 3;
-        }
-        if (this.progress[skill].exercises >= 50) {
-            this.progress[skill].level = 4;
+        const levels = [0, 5, 15, 30, 50];
+        for (let i = levels.length - 1; i >= 0; i--) {
+            if (this.progress[skill].exercises >= levels[i]) {
+                this.progress[skill].level = i + 1;
+                break;
+            }
         }
         
-        this.saveProgress();
+        // نقاط المكافأة
+        this.progress.points += 10;
+        
+        // الإنجازات
+        this.checkAchievements(skill);
+        
+        this.save();
         this.updateUI();
+        this.showNotification(`🎉 أكملت تمرين ${this.getSkillName(skill)}! +10 نقاط`);
     }
-
-    // حفظ التقدم
-    saveProgress() {
-        localStorage.setItem('teachingProgress', JSON.stringify(this.progress));
-    }
-
-    // تحديث واجهة المستخدم
-    updateUI() {
-        // تحديث المخطط البياني
-        if (window.progressChart) {
-            const data = this.getProgressData();
-            window.progressChart.data.datasets[0].data = data.percentages;
-            window.progressChart.update();
-        }
-    }
-
-    // الحصول على بيانات التقدم
-    getProgressData() {
-        const skills = ['speaking', 'reading', 'listening', 'writing'];
-        const percentages = skills.map(skill => {
-            const maxExercises = 50;
-            return Math.min(100, (this.progress[skill].exercises / maxExercises) * 100);
-        });
-
-        return {
-            labels: ['التحدث', 'القراءة', 'الاستماع', 'الكتابة'],
-            percentages,
-            levels: skills.map(skill => this.progress[skill].level)
-        };
-    }
-}
-
-// تهيئة متتبع التقدم
-const progressTracker = new ProgressTracker();
-
-// مخطط التقدم
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('progressChart')) {
-        const ctx = document.getElementById('progressChart').getContext('2d');
-        const progressData = progressTracker.getProgressData();
+    
+    checkAchievements(skill) {
+        const achievements = [
+            { id: 'first_exercise', condition: () => this.getTotalExercises() === 1, title: 'البداية 🚀' },
+            { id: 'speaking_master', condition: () => this.progress.speaking.exercises >= 10, title: 'خطيب ممتاز 🎤' },
+            { id: 'daily_streak', condition: () => this.getStreak() >= 3, title: 'ملتزم ⭐' },
+            { id: 'level_up', condition: () => Object.values(this.progress).some(s => s.level >= 3), title: 'متقدم 📈' }
+        ];
         
-        window.progressChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: progressData.labels,
-                datasets: [{
-                    label: 'مستوى التقدم',
-                    data: progressData.percentages,
-                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                    borderColor: 'rgba(79, 70, 229, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(79, 70, 229, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(79, 70, 229, 1)'
-                }]
-            },
-            options: {
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    }
-                }
+        achievements.forEach(achievement => {
+            if (!this.progress.achievements.includes(achievement.id) && achievement.condition()) {
+                this.progress.achievements.push(achievement.id);
+                this.showAchievement(achievement.title);
             }
         });
     }
+    
+    getTotalExercises() {
+        return Object.values(this.progress)
+            .filter(s => typeof s === 'object' && s.exercises)
+            .reduce((sum, s) => sum + s.exercises, 0);
+    }
+    
+    getStreak() {
+        // محاكاة نظام التسلسل اليومي
+        return Math.floor(Math.random() * 5) + 1;
+    }
+    
+    getSkillName(skill) {
+        const names = {
+            speaking: 'التحدث',
+            reading: 'القراءة',
+            listening: 'الاستماع',
+            writing: 'الكتابة'
+        };
+        return names[skill] || skill;
+    }
+    
+    save() {
+        localStorage.setItem('teacher_progress', JSON.stringify(this.progress));
+    }
+    
+    updateUI() {
+        // تحديث شريط التقدم
+        document.querySelectorAll('.skill-progress').forEach(bar => {
+            const skill = bar.dataset.skill;
+            if (this.progress[skill]) {
+                const percentage = Math.min(100, (this.progress[skill].exercises / 50) * 100);
+                bar.style.width = `${percentage}%`;
+                bar.parentElement.querySelector('.progress-text').textContent = `${percentage.toFixed(0)}%`;
+            }
+        });
+        
+        // تحديث النقاط
+        const pointsElement = document.getElementById('userPoints');
+        if (pointsElement) {
+            pointsElement.textContent = this.progress.points;
+        }
+    }
+    
+    showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                ${message}
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    }
+    
+    showAchievement(title) {
+        const achievement = document.createElement('div');
+        achievement.className = 'achievement-notification';
+        achievement.innerHTML = `
+            <div class="achievement-content">
+                <i class="fas fa-trophy"></i>
+                <div>
+                    <h4>إنجاز جديد! 🎯</h4>
+                    <p>${title}</p>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(achievement);
+        
+        setTimeout(() => {
+            achievement.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            achievement.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(achievement);
+            }, 500);
+        }, 5000);
+    }
+}
 
-    // إضافة حدث للتدريب على المهارات
+// أنماط إضافية
+const progressStyles = `
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-out;
+        z-index: 9999;
+        max-width: 300px;
+    }
+    
+    .notification.show {
+        transform: translateX(0);
+    }
+    
+    .achievement-notification {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: 9999;
+        max-width: 300px;
+    }
+    
+    .achievement-notification.show {
+        transform: translateX(0);
+    }
+    
+    .achievement-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .achievement-content i {
+        font-size: 2rem;
+    }
+    
+    .skill-progress-bar {
+        height: 10px;
+        background: #e5e7eb;
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+    
+    .skill-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #4f46e5, #10b981);
+        transition: width 0.5s ease;
+    }
+    
+    .progress-text {
+        font-size: 0.9rem;
+        color: #666;
+    }
+`;
+
+// إضافة الأنماط
+const styleSheet = document.createElement('style');
+styleSheet.textContent = progressStyles;
+document.head.appendChild(styleSheet);
+
+// تهيئة النظام
+document.addEventListener('DOMContentLoaded', () => {
+    window.progressSystem = new ProgressSystem();
+    window.progressSystem.updateUI();
+    
+    // ربط أزرار المهارات
     document.querySelectorAll('.skill-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const skillCard = this.closest('.skill-card');
-            const skillName = skillCard.querySelector('h3').textContent;
-            
+        button.addEventListener('click', function() {
+            const skill = this.closest('.skill-card').querySelector('h3').textContent;
             let skillKey = '';
-            if (skillName.includes('تحدث')) skillKey = 'speaking';
-            else if (skillName.includes('قراءة')) skillKey = 'reading';
-            else if (skillName.includes('استماع')) skillKey = 'listening';
-            else if (skillName.includes('كتابة')) skillKey = 'writing';
+            
+            if (skill.includes('تحدث')) skillKey = 'speaking';
+            else if (skill.includes('قراءة')) skillKey = 'reading';
+            else if (skill.includes('استماع')) skillKey = 'listening';
+            else if (skill.includes('كتابة')) skillKey = 'writing';
             
             if (skillKey) {
-                progressTracker.updateProgress(skillKey);
-                alert(`تم تحديث تقدمك في ${skillName}! استمر في العمل الجيد.`);
-            }
-        });
-    });
-
-    // عرض التقرير الكامل
-    window.viewDetailedProgress = function() {
-        const data = progressTracker.getProgressData();
-        let report = 'تقرير تقدمك التعليمي:\n\n';
-        
-        data.labels.forEach((label, index) => {
-            report += `${label}: ${data.percentages[index].toFixed(1)}%\n`;
-            report += `المستوى: ${data.levels[index]}\n`;
-            report += `---\n`;
-        });
-        
-        alert(report);
-    };
-
-    // تحميل بيانات التقدم عند البدء
-    progressTracker.updateUI();
-});
-
-// دعم وضع الهاتف المحمول
-function initMobileSupport() {
-    const menuBtn = document.querySelector('.menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (menuBtn && navLinks) {
-        menuBtn.addEventListener('click', function() {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            if (navLinks.style.display === 'flex') {
-                navLinks.style.flexDirection = 'column';
-                navLinks.style.position = 'absolute';
-                navLinks.style.top = '100%';
-                navLinks.style.left = '0';
-                navLinks.style.right = '0';
-                navLinks.style.background = 'white';
-                navLinks.style.padding = '20px';
-                navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-            }
-        });
-    }
-}
-
-// تهيئة التطبيق
-window.addEventListener('load', function() {
-    initMobileSupport();
-    
-    // تحريك السلس للروابط
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
+                window.progressSystem.completeExercise(skillKey);
             }
         });
     });
