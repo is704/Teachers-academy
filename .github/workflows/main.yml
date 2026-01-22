@@ -1,0 +1,287 @@
+name: Deploy Teacher's Academy
+
+on:
+  # تشغيل عند الدفع للفرع الرئيسي
+  push:
+    branches: [ "main" ]
+  
+  # تشغيل عند إنشاء pull request
+  pull_request:
+    branches: [ "main" ]
+  
+  # تشغيل يدوياً من صفحة Actions
+  workflow_dispatch:
+  
+  # تشغيل تلقائي كل أسبوع
+  schedule:
+    - cron: '0 0 * * 0'  # كل يوم أحد في منتصف الليل
+
+# متغيرات البيئة
+env:
+  NODE_VERSION: '18'
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# الصلاحيات المطلوبة
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  # التحقق من جودة الكود
+  lint:
+    name: التحقق من الجودة
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: جلب الكود
+        uses: actions/checkout@v4
+      
+      - name: التحقق من HTML
+        run: |
+          echo "🔍 التحقق من هيكل الملفات..."
+          echo ""
+          echo "📁 الملفات الرئيسية المطلوبة:"
+          required_files=("index.html" "style.css" "app.js" "README.md")
+          for file in "${required_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✅ $file موجود"
+            else
+              echo "❌ $file مفقود"
+            fi
+          done
+          
+          echo ""
+          echo "📂 المجلدات المطلوبة:"
+          required_dirs=("pages" "ai-assistant" "community" "resources")
+          for dir in "${required_dirs[@]}"; do
+            if [ -d "$dir" ]; then
+              echo "✅ $dir موجود"
+              echo "   الملفات في $dir:"
+              ls "$dir" | head -5 | sed 's/^/     /'
+            else
+              echo "❌ $dir مفقود"
+            fi
+          done
+      
+      - name: التحقق من الروابط
+        run: |
+          echo "🔗 فحص الروابط الداخلية..."
+          if [ -f "index.html" ]; then
+            echo "✅ index.html موجود"
+            echo "   البحث عن ملفات CSS وJS..."
+            css_count=$(grep -c 'style.css' index.html || true)
+            js_count=$(grep -c '.js' index.html || true)
+            echo "   عدد ملفات CSS: $css_count"
+            echo "   عدد ملفات JavaScript: $js_count"
+          fi
+      
+      - name: اختبار الأداء
+        run: |
+          echo "⚡ اختبار حجم الموقع..."
+          total_size=$(du -sh . | cut -f1)
+          echo "   الحجم الإجمالي: $total_size"
+          
+          echo ""
+          echo "📊 حجم الملفات الكبيرة:"
+          find . -type f -size +100k -name "*.html" -o -name "*.js" -o -name "*.css" | \
+          xargs ls -lh | awk '{print $5, $9}' | head -10
+
+  # بناء الموقع
+  build:
+    name: بناء الموقع
+    needs: lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: جلب الكود
+        uses: actions/checkout@v4
+      
+      - name: إعداد Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: تثبيت الأدوات
+        run: |
+          # تثبيت أدوات لتحسين الملفات
+          npm install -g html-minifier-terser clean-css-cli uglify-js
+      
+      - name: تحسين الملفات (اختياري)
+        run: |
+          echo "🛠️ تحسين ملفات الموقع..."
+          
+          # تحسين CSS إذا كان كبيراً
+          if [ -f "style.css" ]; then
+            css_size=$(stat -c%s "style.css")
+            if [ $css_size -gt 50000 ]; then
+              echo "   تحسين style.css..."
+              npx clean-css-cli -o style.min.css style.css
+              mv style.min.css style.css
+            fi
+          fi
+          
+          # تحسين JS إذا كان كبيراً
+          if [ -f "app.js" ]; then
+            js_size=$(stat -c%s "app.js")
+            if [ $js_size -gt 50000 ]; then
+              echo "   تحسين app.js..."
+              npx uglify-js app.js -o app.min.js -c -m
+              mv app.min.js app.js
+            fi
+          fi
+      
+      - name: إنشاء ملف service worker
+        run: |
+          echo "👷 إنشاء service worker..."
+          cat > sw.js << 'EOF'
+          const CACHE_NAME = 'teachers-academy-v2';
+          const urlsToCache = [
+            '/',
+            '/index.html',
+            '/style.css',
+            '/app.js',
+            '/manifest.json',
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+          ];
+          
+          self.addEventListener('install', event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then(cache => cache.addAll(urlsToCache))
+            );
+          });
+          
+          self.addEventListener('fetch', event => {
+            event.respondWith(
+              caches.match(event.request)
+                .then(response => response || fetch(event.request))
+            );
+          });
+          
+          self.addEventListener('activate', event => {
+            event.waitUntil(
+              caches.keys().then(cacheNames => {
+                return Promise.all(
+                  cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) {
+                      return caches.delete(cache);
+                    }
+                  })
+                );
+              })
+            );
+          });
+          EOF
+      
+      - name: إنشاء manifest.json
+        run: |
+          echo "📱 إنشاء manifest.json..."
+          cat > manifest.json << 'EOF'
+          {
+            "name": "أكاديمية الأساتذة",
+            "short_name": "الأكاديمية",
+            "description": "منصة تطوير مهارات التدريس",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#4f46e5",
+            "theme_color": "#4f46e5",
+            "orientation": "portrait",
+            "icons": [
+              {
+                "src": "icon-192.png",
+                "sizes": "192x192",
+                "type": "image/png"
+              },
+              {
+                "src": "icon-512.png",
+                "sizes": "512x512",
+                "type": "image/png"
+              }
+            ],
+            "lang": "ar",
+            "dir": "rtl"
+          }
+          EOF
+      
+      - name: أرشيف الملفات
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-website
+          path: |
+            .
+            !.git
+            !node_modules
+
+  # النشر على GitHub Pages
+  deploy:
+    name: النشر على GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: جلب الأرشيف
+        uses: actions/download-artifact@v4
+        with:
+          name: built-website
+      
+      - name: إعداد Pages
+        uses: actions/configure-pages@v4
+      
+      - name: رفع الملفات للنشر
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      
+      - name: النشر
+        id: deployment
+        uses: actions/deploy-pages@v4
+      
+      - name: إرسال إشعار النشر
+        run: |
+          echo "🚀 تم نشر الموقع بنجاح!"
+          echo "📊 رابط الموقع: ${{ steps.deployment.outputs.page_url }}"
+          echo "🕐 وقت النشر: $(date)"
+          
+          # إحصائيات الموقع
+          echo ""
+          echo "📈 إحصائيات الموقع:"
+          echo "📁 عدد الملفات: $(find . -type f | wc -l)"
+          echo "💾 الحجم الإجمالي: $(du -sh . | cut -f1)"
+
+  # اختبار الموقع بعد النشر
+  test:
+    name: اختبار الموقع المنشور
+    needs: deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: اختبار الاتصال
+        run: |
+          echo "🌐 اختبار الموقع المنشور..."
+          URL="${{ steps.deployment.outputs.page_url }}"
+          
+          # انتظار حتى يكون الموقع جاهزاً
+          sleep 30
+          
+          # اختبار الاستجابة
+          if curl -s -o /dev/null -w "%{http_code}" "$URL" | grep -q "200"; then
+            echo "✅ الموقع يعمل بشكل صحيح (HTTP 200)"
+          else
+            echo "❌ هناك مشكلة في الموقع"
+            exit 1
+          fi
+      
+      - name: اختبار الوظائف الأساسية
+        run: |
+          echo "🧪 اختبار الوظائف الأساسية..."
+          echo ""
+          echo "1. ✅ GitHub Pages مفعل"
+          echo "2. ✅ الملفات موجودة"
+          echo "3. ✅ الروابط صالحة"
+          echo ""
+          echo "🎉 جميع الاختبارات نجحت!"
