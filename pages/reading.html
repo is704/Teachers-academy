@@ -1,1 +1,562 @@
-# القراءة 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارة القراءة - أكاديمية الأساتذة</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .reading-container {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .reading-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .reading-header h1 {
+            font-size: 2.5rem;
+            color: #f093fb;
+            margin-bottom: 20px;
+        }
+        
+        .reading-material {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            max-height: 500px;
+            overflow-y: auto;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .reading-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .reading-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .reading-btn.primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .reading-btn.secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .speed-control {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .speed-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .exercise-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .comprehension-questions {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+        
+        .question-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: #f093fb;
+            border: 2px solid #f093fb;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- زر العودة -->
+    <a href="../index.html" class="back-btn">
+        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+    </a>
+
+    <div class="reading-container">
+        <div class="container">
+            <!-- العنوان الرئيسي -->
+            <div class="reading-header">
+                <div class="skill-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h1>مهارة القراءة والفهم</h1>
+                <p class="subtitle">طور قدراتك على القراءة السريعة والفهم العميق للنصوص التعليمية</p>
+            </div>
+
+            <!-- النص الحالي -->
+            <div class="current-reading">
+                <h2><i class="fas fa-book"></i> النص الحالي للقراءة</h2>
+                <div class="reading-material" id="readingText">
+                    <h3>التعليم في عصر الذكاء الاصطناعي</h3>
+                    <p>يشهد العالم تحولاً جذرياً في مجال التعليم مع تطور تقنيات الذكاء الاصطناعي. لم يعد دور المعلم مقتصراً على نقل المعلومات، بل أصبح موجهاً ومنسقاً لعملية التعلم. المعلم الحديث يحتاج إلى مهارات جديدة تتجاوز المعرفة الأكاديمية التقليدية.</p>
+                    
+                    <p>من أهم المهارات المطلوبة في عصر الذكاء الاصطناعي:</p>
+                    <ul>
+                        <li>القدرة على تقييم المعلومات وتمييز الموثوق منها</li>
+                        <li>تطوير التفكير النقدي والإبداعي لدى الطلاب</li>
+                        <li>استخدام الأدوات التكنولوجية بفعالية</li>
+                        <li>التعلم المستمر والتكيف مع التغييرات</li>
+                    </ul>
+                    
+                    <p>القراءة الناقدة أصبحت ضرورة قصوى للمعلم العصري. فهي تمكنه من تحليل النصوص التعليمية، تقييم المناهج، واختيار المصادر المناسبة. القراءة السريعة مع الفهم تتيح للمعلم مواكبة التطورات في مجال تخصصه.</p>
+                    
+                    <p>ممارسة القراءة اليومية، ولو لمدة 30 دقيقة، تعزز القدرة على التركيز، توسع المعرفة، وتطور الحصيلة اللغوية. اختيار نصوص متنوعة بين الأكاديمية والتطبيقية يحقق توازناً في المعرفة.</p>
+                </div>
+                
+                <!-- أدوات القراءة -->
+                <div class="reading-tools">
+                    <div class="speed-control">
+                        <h4><i class="fas fa-tachometer-alt"></i> سرعة القراءة</h4>
+                        <input type="range" min="100" max="500" value="250" class="speed-slider" id="speedSlider">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>بطيئة</span>
+                            <span id="speedValue">250 كلمة/دقيقة</span>
+                            <span>سريعة</span>
+                        </div>
+                    </div>
+                    
+                    <div class="reading-controls">
+                        <button class="reading-btn primary" onclick="startReading()">
+                            <i class="fas fa-play"></i> بدء القراءة
+                        </button>
+                        <button class="reading-btn secondary" onclick="pauseReading()">
+                            <i class="fas fa-pause"></i> إيقاف مؤقت
+                        </button>
+                        <button class="reading-btn secondary" onclick="changeText()">
+                            <i class="fas fa-sync"></i> تغيير النص
+                        </button>
+                        <button class="reading-btn secondary" onclick="showComprehension()">
+                            <i class="fas fa-question-circle"></i> اختبار الفهم
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تمارين القراءة -->
+            <div class="reading-exercises">
+                <h2><i class="fas fa-dumbbell"></i> تمارين القراءة</h2>
+                
+                <div class="exercises-grid">
+                    <div class="exercise-card">
+                        <h4><i class="fas fa-bolt"></i> القراءة السريعة</h4>
+                        <p>اقرأ النص في 60 ثانية مع الحفاظ على الفهم</p>
+                        <button class="reading-btn secondary" onclick="startSpeedReading()">ابدأ التمرين</button>
+                        <div id="speedTimer" style="text-align: center; margin-top: 10px; font-size: 1.5rem; font-weight: bold;"></div>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h4><i class="fas fa-search"></i> المسح الضوئي</h4>
+                        <p>ابحث عن معلومات محددة في النص خلال 30 ثانية</p>
+                        <button class="reading-btn secondary" onclick="startScanning()">ابدأ المسح</button>
+                        <input type="text" id="scanTarget" placeholder="ماذا تبحث؟" style="width: 100%; margin-top: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h4><i class="fas fa-brain"></i> التلخيص</h4>
+                        <p>اقرأ النص ثم لخصه في 3 جمل</p>
+                        <button class="reading-btn secondary" onclick="startSummarizing()">ابدأ التلخيص</button>
+                        <textarea id="summaryBox" placeholder="اكتب تلخيصك هنا..." style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- اختبار الفهم -->
+            <div class="comprehension-questions" id="comprehensionSection" style="display: none;">
+                <h2><i class="fas fa-clipboard-check"></i> اختبار الفهم</h2>
+                
+                <div id="questionsContainer">
+                    <!-- سيتم إضافة الأسئلة هنا -->
+                </div>
+                
+                <button class="reading-btn primary" onclick="checkAnswers()" style="margin-top: 20px;">
+                    <i class="fas fa-check"></i> تصحيح الإجابات
+                </button>
+                
+                <div id="results" style="margin-top: 20px; padding: 15px; border-radius: 10px; display: none;"></div>
+            </div>
+
+            <!-- المكتبة -->
+            <div class="library-section" style="margin-top: 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h2><i class="fas fa-bookmark"></i> مكتبة النصوص</h2>
+                <p>اختر نصاً للقراءة من المكتبة:</p>
+                
+                <div class="texts-grid">
+                    <div class="text-card" onclick="loadText('education')">
+                        <h4>نظريات التعليم الحديثة</h4>
+                        <p>نص أكاديمي عن أحدث النظريات التربوية</p>
+                        <span class="difficulty easy">سهل</span>
+                    </div>
+                    
+                    <div class="text-card" onclick="loadText('technology')">
+                        <h4>التكنولوجيا في التعليم</h4>
+                        <p>تأثير التكنولوجيا على العملية التعليمية</p>
+                        <span class="difficulty medium">متوسط</span>
+                    </div>
+                    
+                    <div class="text-card" onclick="loadText('psychology')">
+                        <h4>سيكولوجية التعلم</h4>
+                        <p>العوامل النفسية المؤثرة في التعلم</p>
+                        <span class="difficulty hard">متقدم</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تقدم القراءة -->
+            <div class="progress-section" style="margin-top: 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h2><i class="fas fa-chart-line"></i> تقدمك في القراءة</h2>
+                <div class="progress-bar" style="height: 10px; background: #e9ecef; border-radius: 5px; overflow: hidden;">
+                    <div class="progress-fill" id="readingProgress" style="height: 100%; background: linear-gradient(90deg, #f093fb, #f5576c); width: 0%;"></div>
+                </div>
+                <p style="margin-top: 10px;">اقرأ <span id="pagesNeeded">15</span> صفحة أخرى لترتقي للمستوى التالي!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // نصوص المكتبة
+        const textsLibrary = {
+            education: `نظريات التعليم الحديثة
+            
+            مر التعليم بعدة نظريات تطورت مع الزمن، من النظرية السلوكية التي تركز على المثير والاستجابة، إلى النظرية البنائية التي تؤكد على بناء المعرفة من قبل المتعلم نفسه.
+            
+            النظرية البنائية لجان بياجيه:
+            • تنمية القدرات العقلية تمر بمراحل
+            • التعلم يحدث من خلال التفاعل مع البيئة
+            • المعرفة تبنى ولا تكتسب فقط
+            
+            النظرية الاجتماعية لفيجوتسكي:
+            • التعلم عملية اجتماعية
+            • المنطقة التنموية القريبة
+            • أهمية التفاعل الاجتماعي
+            
+            النظرية المعرفية:
+            • معالجة المعلومات
+            • الذاكرة العاملة والطويلة المدى
+            • استراتيجيات التعلم
+            
+            التكامل بين النظريات:
+            المعلم الناجح يجمع بين أفضل ما في كل نظرية، حسب احتياجات طلابه وطبيعة المادة التعليمية.`,
+            
+            technology: `التكنولوجيا في التعليم
+            
+            أحدثت التكنولوجيا تغييرات جوهرية في أساليب التعليم والتعلّم، حيث أصبحت جزءاً لا يتجزأ من العملية التعليمية.
+            
+            أدوات التعليم الإلكتروني:
+            • منصات التعلم عن بعد
+            • التطبيقات التعليمية التفاعلية
+            • الواقع الافتراضي والمعزز
+            
+            فوائد التكنولوجيا في التعليم:
+            1. توفير مصادر تعلم متنوعة
+            2. إمكانية التعلم الذاتي
+            3. التواصل المستمر بين المعلم والطالب
+            4. تقييم فوري للتقدم
+            
+            تحديات استخدام التكنولوجيا:
+            • الفجوة الرقمية بين الطلاب
+            • الحاجة للتدريب المستمر
+            • صعوبة تقييم بعض المهارات
+            
+            مستقبل التعليم مع التكنولوجيا:
+            يتجه التعليم نحو التخصيص أكثر، حيث تقدم التكنولوجيا حلولاً تعليمية مخصصة لكل طالب حسب سرعته وأسلوب تعلمه.`,
+            
+            psychology: `سيكولوجية التعلم
+            
+            فهم العمليات النفسية المرتبطة بالتعلم يساعد المعلم في تصميم تجارب تعليمية أكثر فعالية.
+            
+            الدافعية والتعلم:
+            • الدافعية الداخلية مقابل الخارجية
+            • نظرية تحديد الهدف
+            • أهمية الشعور بالإنجاز
+            
+            الانتباه والذاكرة:
+            • أنواع الانتباه (مستمر، منقسم)
+            • استراتيجيات تحسين الذاكرة
+            • النسيان وآليات التذكر
+            
+            العواطف والتعلم:
+            • تأثير القلق على الأداء
+            • أهمية البيئة الإيجابية
+            • التعلم العاطفي الاجتماعي
+            
+            أنماط التعلم:
+            • التعلم البصري
+            • التعلم السمعي
+            • التعلم الحركي
+            
+            تطبيقات عملية:
+            استخدام هذه المعرفة النفسية يساعد في تخطيط الدروس، اختيار الأنشطة، وتقديم الدعم النفسي المناسب للطلاب.`
+        };
+        
+        // عناصر التحكم في القراءة
+        let readingTimer;
+        let currentSpeed = 250;
+        let isReading = false;
+        let currentText = 'education';
+        
+        // تحديث السرعة
+        document.getElementById('speedSlider').addEventListener('input', function() {
+            currentSpeed = this.value;
+            document.getElementById('speedValue').textContent = `${currentSpeed} كلمة/دقيقة`;
+        });
+        
+        // بدء القراءة الموجهة
+        function startReading() {
+            const textElement = document.getElementById('readingText');
+            const text = textElement.textContent;
+            const words = text.split(' ');
+            
+            if (isReading) {
+                clearInterval(readingTimer);
+                isReading = false;
+                document.querySelector('.reading-btn.primary').innerHTML = '<i class="fas fa-play"></i> بدء القراءة';
+                return;
+            }
+            
+            isReading = true;
+            document.querySelector('.reading-btn.primary').innerHTML = '<i class="fas fa-stop"></i> إيقاف القراءة';
+            
+            let currentWord = 0;
+            const wordsPerMinute = currentSpeed;
+            const delay = 60000 / wordsPerMinute;
+            
+            readingTimer = setInterval(() => {
+                if (currentWord >= words.length) {
+                    clearInterval(readingTimer);
+                    isReading = false;
+                    document.querySelector('.reading-btn.primary').innerHTML = '<i class="fas fa-play"></i> بدء القراءة';
+                    alert('🎉 أكملت القراءة بنجاح!');
+                    
+                    // حفظ التقدم
+                    if (typeof window.progressSystem !== 'undefined') {
+                        window.progressSystem.completeExercise('reading');
+                        updateProgress();
+                    }
+                    return;
+                }
+                
+                // تسليط الضوء على الكلمة الحالية
+                textElement.innerHTML = text.split(' ').map((word, index) => {
+                    if (index === currentWord) {
+                        return `<span style="background: yellow; padding: 2px; border-radius: 3px;">${word}</span>`;
+                    }
+                    return word;
+                }).join(' ');
+                
+                currentWord++;
+            }, delay);
+        }
+        
+        function pauseReading() {
+            if (isReading) {
+                clearInterval(readingTimer);
+                isReading = false;
+                document.querySelector('.reading-btn.primary').innerHTML = '<i class="fas fa-play"></i> استئناف القراءة';
+            }
+        }
+        
+        function changeText() {
+            const texts = Object.keys(textsLibrary);
+            const randomText = texts[Math.floor(Math.random() * texts.length)];
+            loadText(randomText);
+        }
+        
+        function loadText(textId) {
+            currentText = textId;
+            document.getElementById('readingText').innerHTML = textsLibrary[textId];
+        }
+        
+        // القراءة السريعة
+        function startSpeedReading() {
+            const text = document.getElementById('readingText').textContent;
+            const words = text.split(' ').length;
+            
+            let timeLeft = 60;
+            const timerElement = document.getElementById('speedTimer');
+            
+            const timer = setInterval(() => {
+                timerElement.textContent = `${timeLeft} ثانية`;
+                timeLeft--;
+                
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    timerElement.textContent = 'انتهى الوقت!';
+                    
+                    const wpm = Math.floor(words / 1); // كلمات في الدقيقة
+                    alert(`🎯 أكملت القراءة!\nالسرعة: ${wpm} كلمة/دقيقة`);
+                }
+            }, 1000);
+        }
+        
+        // اختبار الفهم
+        const comprehensionQuestions = {
+            education: [
+                {
+                    question: "ما هي النظرية التي تركز على بناء المعرفة من قبل المتعلم؟",
+                    options: ["السلوكية", "البنائية", "المعرفية", "الاجتماعية"],
+                    answer: 1
+                },
+                {
+                    question: "من هو مؤسس النظرية البنائية؟",
+                    options: ["سكينر", "فيجوتسكي", "بياجيه", "بافلوف"],
+                    answer: 2
+                },
+                {
+                    question: "ما هي المنطقة التنموية القريبة في نظرية فيجوتسكي؟",
+                    options: [
+                        "ما يمكن للطالب تعلمه بمساعدة الآخرين",
+                        "ما تعلمه الطالب سابقاً",
+                        "المهارات المستقبلية",
+                        "المستوى الحالي للطالب"
+                    ],
+                    answer: 0
+                }
+            ],
+            technology: [
+                {
+                    question: "ما إحدى فوائد استخدام التكنولوجيا في التعليم؟",
+                    options: [
+                        "زيادة تكاليف التعليم",
+                        "توفير مصادر تعلم متنوعة",
+                        "تقليل التفاعل الاجتماعي",
+                        "صعوبة التقييم"
+                    ],
+                    answer: 1
+                }
+            ]
+        };
+        
+        function showComprehension() {
+            const section = document.getElementById('comprehensionSection');
+            section.style.display = 'block';
+            
+            const container = document.getElementById('questionsContainer');
+            const questions = comprehensionQuestions[currentText] || comprehensionQuestions.education;
+            
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+                questionDiv.innerHTML = `
+                    <h4>سؤال ${index + 1}: ${q.question}</h4>
+                    <div class="options">
+                        ${q.options.map((option, optIndex) => `
+                            <label style="display: block; margin: 5px 0;">
+                                <input type="radio" name="q${index}" value="${optIndex}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+        
+        function checkAnswers() {
+            const questions = comprehensionQuestions[currentText] || comprehensionQuestions.education;
+            let correct = 0;
+            
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === q.answer) {
+                    correct++;
+                }
+            });
+            
+            const percentage = (correct / questions.length) * 100;
+            const resultsElement = document.getElementById('results');
+            
+            let message = '';
+            if (percentage >= 80) {
+                message = `🎉 ممتاز! حصلت على ${correct}/${questions.length} (${percentage}%)`;
+            } else if (percentage >= 60) {
+                message = `👍 جيد! حصلت على ${correct}/${questions.length} (${percentage}%)`;
+            } else {
+                message = `📚 تحتاج للمزيد من الممارسة: ${correct}/${questions.length} (${percentage}%)`;
+            }
+            
+            resultsElement.innerHTML = `
+                <div style="background: ${percentage >= 60 ? '#d4edda' : '#f8d7da'}; 
+                          color: ${percentage >= 60 ? '#155724' : '#721c24'}; 
+                          padding: 15px; border-radius: 8px;">
+                    <h4>نتيجة اختبار الفهم</h4>
+                    <p>${message}</p>
+                </div>
+            `;
+            resultsElement.style.display = 'block';
+        }
+        
+        // التقدم
+        function updateProgress() {
+            const completed = JSON.parse(localStorage.getItem('reading_exercises') || '0');
+            const progress = (completed / 15) * 100;
+            document.getElementById('readingProgress').style.width = `${progress}%`;
+            document.getElementById('pagesNeeded').textContent = 15 - completed;
+        }
+        
+        // تهيئة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadText('education');
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
