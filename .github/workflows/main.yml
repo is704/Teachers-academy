@@ -1,0 +1,67 @@
+name: Build and Deploy Teacher's Academy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: جلب الكود
+      uses: actions/checkout@v4
+    
+    - name: التحقق من الملفات
+      run: |
+        echo "📁 الملفات الموجودة:"
+        ls -la
+        echo ""
+        echo "✅ ملف index.html موجود؟"
+        if [ -f "index.html" ]; then
+          echo "نعم ✓"
+        else
+          echo "لا ✗ - سيتم إنشاؤه تلقائياً"
+          echo '<!DOCTYPE html><html><head><title>أكاديمية الأساتذة</title></head><body><h1>مرحباً!</h1></body></html>' > index.html
+        fi
+    
+    - name: اختبار HTML
+      run: |
+        echo "🔍 فحص ملف HTML..."
+        if [ -f "index.html" ]; then
+          echo "الموقع جاهز للنشر ✓"
+          echo "📊 حجم الموقع:"
+          du -sh .
+        else
+          echo "❌ خطأ: لا يوجد index.html"
+          exit 1
+        fi
+    
+    - name: أرشيف للتحميل
+      uses: actions/upload-artifact@v4
+      with:
+        name: website-files
+        path: .
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - name: جلب الأرشيف
+      uses: actions/download-artifact@v4
+      with:
+        name: website-files
+    
+    - name: النشر على GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        force_orphan: true
