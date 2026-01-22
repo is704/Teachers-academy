@@ -1,1 +1,654 @@
-# الكتابة
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارة الكتابة - أكاديمية الأساتذة</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .writing-container {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .writing-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .writing-header h1 {
+            font-size: 2.5rem;
+            color: #43e97b;
+            margin-bottom: 20px;
+        }
+        
+        .writing-editor {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .editor-toolbar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-btn {
+            padding: 8px 15px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tool-btn:hover {
+            background: #e9ecef;
+        }
+        
+        #writingArea {
+            width: 100%;
+            min-height: 300px;
+            padding: 20px;
+            border: none;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+        }
+        
+        .writing-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .writing-btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .writing-btn.primary {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+        
+        .writing-btn.secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .writing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .templates-section {
+            margin-top: 50px;
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .template-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feedback-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            display: none;
+        }
+        
+        .feedback-section.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .corrections-list {
+            margin-top: 20px;
+        }
+        
+        .correction-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .correction-item.error {
+            background: #ffe3e3;
+            border-left: 4px solid #fa5252;
+        }
+        
+        .correction-item.suggestion {
+            background: #e7f5ff;
+            border-left: 4px solid #339af0;
+        }
+        
+        .correction-item.improvement {
+            background: #fff3bf;
+            border-left: 4px solid #fcc419;
+        }
+        
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: #43e97b;
+            border: 2px solid #43e97b;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- زر العودة -->
+    <a href="../index.html" class="back-btn">
+        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+    </a>
+
+    <div class="writing-container">
+        <div class="container">
+            <!-- العنوان الرئيسي -->
+            <div class="writing-header">
+                <div class="skill-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-pen-fancy"></i>
+                </div>
+                <h1>مهارة الكتابة الأكاديمية</h1>
+                <p class="subtitle">طور أسلوبك الكتابي وتعلم كتابة الخطط الدراسية والتقارير باحترافية</p>
+            </div>
+
+            <!-- محرر الكتابة -->
+            <div class="writing-editor">
+                <div class="editor-toolbar">
+                    <button class="tool-btn" onclick="formatText('bold')">
+                        <i class="fas fa-bold"></i> غامق
+                    </button>
+                    <button class="tool-btn" onclick="formatText('italic')">
+                        <i class="fas fa-italic"></i> مائل
+                    </button>
+                    <button class="tool-btn" onclick="formatText('underline')">
+                        <i class="fas fa-underline"></i> خط
+                    </button>
+                    <button class="tool-btn" onclick="insertBullet()">
+                        <i class="fas fa-list-ul"></i> قائمة
+                    </button>
+                    <button class="tool-btn" onclick="insertNumberedList()">
+                        <i class="fas fa-list-ol"></i> ترقيم
+                    </button>
+                    <button class="tool-btn" onclick="clearText()">
+                        <i class="fas fa-eraser"></i> مسح
+                    </button>
+                </div>
+                
+                <textarea id="writingArea" placeholder="ابدأ الكتابة هنا... يمكنك كتابة خطة درس، تقرير، أو أي نص تعليمي"></textarea>
+            </div>
+
+            <!-- أدوات التحكم -->
+            <div class="writing-controls">
+                <button class="writing-btn primary" onclick="getFeedback()">
+                    <i class="fas fa-check-circle"></i> احصل على التصحيح
+                </button>
+                <button class="writing-btn secondary" onclick="saveDraft()">
+                    <i class="fas fa-save"></i> حفظ المسودة
+                </button>
+                <button class="writing-btn secondary" onclick="loadDraft()">
+                    <i class="fas fa-folder-open"></i> فتح مسودة
+                </button>
+                <button class="writing-btn secondary" onclick="downloadText()">
+                    <i class="fas fa-download"></i> تحميل النص
+                </button>
+            </div>
+
+            <!-- قوالب جاهزة -->
+            <div class="templates-section">
+                <h2><i class="fas fa-layer-group"></i> قوالب جاهزة</h2>
+                <p>اختر قالباً وابدأ الكتابة فوراً:</p>
+                
+                <div class="templates-grid">
+                    <div class="template-card" onclick="loadTemplate('lesson-plan')">
+                        <h4><i class="fas fa-chalkboard-teacher"></i> خطة درس</h4>
+                        <p>قالب احترافي لكتابة خطط الدروس</p>
+                    </div>
+                    
+                    <div class="template-card" onclick="loadTemplate('report')">
+                        <h4><i class="fas fa-file-alt"></i> تقرير مدرسي</h4>
+                        <p>قالب كتابة التقارير الرسمية</p>
+                    </div>
+                    
+                    <div class="template-card" onclick="loadTemplate('activity')">
+                        <h4><i class="fas fa-tasks"></i> نشاط تعليمي</h4>
+                        <p>تصميم الأنشطة الصفية</p>
+                    </div>
+                    
+                    <div class="template-card" onclick="loadTemplate('email')">
+                        <h4><i class="fas fa-envelope"></i> رسالة أولياء الأمور</h4>
+                        <p>قالب للتواصل مع الأهالي</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم التصحيح -->
+            <div class="feedback-section" id="feedbackSection">
+                <h2><i class="fas fa-chart-line"></i> تحليل وتصحيح النص</h2>
+                
+                <div class="writing-stats">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <h4>عدد الكلمات</h4>
+                            <p id="wordCount">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>عدد الجمل</h4>
+                            <p id="sentenceCount">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>متوسط طول الجملة</h4>
+                            <p id="avgSentence">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>مستوى القراءة</h4>
+                            <p id="readingLevel">-</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="corrections-list" id="correctionsList">
+                    <!-- سيتم إضافة التصحيحات هنا -->
+                </div>
+                
+                <div class="improvement-tips">
+                    <h4><i class="fas fa-lightbulb"></i> نصائح للتحسين</h4>
+                    <div id="improvementTips"></div>
+                </div>
+            </div>
+
+            <!-- تحديات الكتابة -->
+            <div class="challenges-section" style="margin-top: 50px;">
+                <h2><i class="fas fa-flag-checkered"></i> تحديات الكتابة</h2>
+                <p>اختبر مهاراتك مع هذه التحديات:</p>
+                
+                <div class="challenges-grid">
+                    <div class="challenge-card">
+                        <h4>التحدي الأول</h4>
+                        <p>اكتب فقرة (150 كلمة) عن "أهمية التعليم التفاعلي"</p>
+                        <button class="writing-btn secondary" onclick="startChallenge(1)">ابدأ التحدي</button>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <h4>التحدي الثاني</h4>
+                        <p>صمم خطة درس لموضوع "الكسور" لمدة 45 دقيقة</p>
+                        <button class="writing-btn secondary" onclick="startChallenge(2)">ابدأ التحدي</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تقدم الكتابة -->
+            <div class="progress-section" style="margin-top: 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h2><i class="fas fa-chart-line"></i> تقدمك في الكتابة</h2>
+                <div class="progress-bar" style="height: 10px; background: #e9ecef; border-radius: 5px; overflow: hidden;">
+                    <div class="progress-fill" id="writingProgress" style="height: 100%; background: linear-gradient(90deg, #43e97b, #38f9d7); width: 0%;"></div>
+                </div>
+                <p style="margin-top: 10px;">أكمل <span id="exercisesNeeded">5</span> تمارين لترتقي للمستوى التالي!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../ai-assistant/ai-feedback.js"></script>
+    <script>
+        // أدوات التنسيق
+        function formatText(command) {
+            const textarea = document.getElementById('writingArea');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            let formattedText = selectedText;
+            
+            switch(command) {
+                case 'bold':
+                    formattedText = `**${selectedText}**`;
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText}*`;
+                    break;
+                case 'underline':
+                    formattedText = `__${selectedText}__`;
+                    break;
+            }
+            
+            textarea.value = textarea.value.substring(0, start) + 
+                           formattedText + 
+                           textarea.value.substring(end);
+            
+            textarea.focus();
+            textarea.setSelectionRange(start + formattedText.length, start + formattedText.length);
+        }
+        
+        function insertBullet() {
+            const textarea = document.getElementById('writingArea');
+            const cursorPos = textarea.selectionStart;
+            textarea.value = textarea.value.substring(0, cursorPos) + 
+                           '• ' + 
+                           textarea.value.substring(cursorPos);
+            textarea.focus();
+        }
+        
+        function insertNumberedList() {
+            const textarea = document.getElementById('writingArea');
+            const cursorPos = textarea.selectionStart;
+            textarea.value = textarea.value.substring(0, cursorPos) + 
+                           '1. ' + 
+                           textarea.value.substring(cursorPos);
+            textarea.focus();
+        }
+        
+        function clearText() {
+            if (confirm('هل تريد مسح النص؟')) {
+                document.getElementById('writingArea').value = '';
+            }
+        }
+        
+        // التصحيح
+        function getFeedback() {
+            const text = document.getElementById('writingArea').value;
+            if (!text.trim()) {
+                alert('اكتب نصاً أولاً للحصول على التصحيح');
+                return;
+            }
+            
+            // تحليل النص
+            analyzeText(text);
+            
+            // إظهار قسم التصحيح
+            document.getElementById('feedbackSection').classList.add('show');
+            
+            // حفظ التقدم
+            if (typeof window.progressSystem !== 'undefined') {
+                window.progressSystem.completeExercise('writing');
+                updateProgress();
+            }
+        }
+        
+        function analyzeText(text) {
+            // إحصائيات النص
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const sentences = text.split(/[.!؟]/).filter(s => s.trim());
+            
+            document.getElementById('wordCount').textContent = words.length;
+            document.getElementById('sentenceCount').textContent = sentences.length;
+            document.getElementById('avgSentence').textContent = sentences.length > 0 ? 
+                Math.round(words.length / sentences.length) : 0;
+            
+            // تحديد مستوى القراءة
+            let level = 'سهل';
+            if (words.length > 500) level = 'متوسط';
+            if (words.length > 1000) level = 'متقدم';
+            document.getElementById('readingLevel').textContent = level;
+            
+            // تصحيح الأخطاء الشائعة
+            const corrections = window.aiFeedback.analyzeText(text);
+            displayCorrections(corrections);
+        }
+        
+        function displayCorrections(corrections) {
+            const container = document.getElementById('correctionsList');
+            const tipsContainer = document.getElementById('improvementTips');
+            
+            container.innerHTML = '';
+            tipsContainer.innerHTML = '';
+            
+            if (corrections.errors.length === 0 && corrections.suggestions.length === 0) {
+                container.innerHTML = '<p style="color: green; padding: 20px; text-align: center;">✅ النص ممتاز! لا توجد أخطاء.</p>';
+            } else {
+                // عرض الأخطاء
+                corrections.errors.forEach(error => {
+                    const div = document.createElement('div');
+                    div.className = 'correction-item error';
+                    div.innerHTML = `
+                        <i class="fas fa-exclamation-circle" style="color: #fa5252;"></i>
+                        <div>
+                            <strong>${error.type}</strong>
+                            <p>${error.message}</p>
+                            ${error.suggestion ? `<small>اقتراح: ${error.suggestion}</small>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                // عرض الاقتراحات
+                corrections.suggestions.forEach(suggestion => {
+                    const div = document.createElement('div');
+                    div.className = 'correction-item suggestion';
+                    div.innerHTML = `
+                        <i class="fas fa-lightbulb" style="color: #339af0;"></i>
+                        <div>
+                            <strong>تحسين</strong>
+                            <p>${suggestion.message}</p>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                // نصائح التحسين
+                const tips = window.aiFeedback.getWritingTips(corrections.stats);
+                tips.forEach(tip => {
+                    const tipDiv = document.createElement('div');
+                    tipDiv.className = 'correction-item improvement';
+                    tipDiv.innerHTML = `
+                        <i class="fas fa-star" style="color: #fcc419;"></i>
+                        <div>
+                            <p>${tip}</p>
+                        </div>
+                    `;
+                    tipsContainer.appendChild(tipDiv);
+                });
+            }
+        }
+        
+        // القوالب
+        function loadTemplate(templateName) {
+            const templates = {
+                'lesson-plan': `خطة درس
+المادة: _______
+الصف: _______
+الموضوع: _______
+الزمن: 45 دقيقة
+
+الأهداف التعليمية:
+1. _______
+2. _______
+3. _______
+
+الوسائل التعليمية:
+• _______
+• _______
+
+أنشطة الدرس:
+1. التمهيد (5 دقائق): _______
+2. العرض (25 دقيقة): _______
+3. التطبيق (10 دقائق): _______
+4. التقويم (5 دقائق): _______
+
+الواجب المنزلي:
+• _______`,
+                
+                'report': `تقرير أداء طالب
+اسم الطالب: _______
+الصف: _______
+الفصل الدراسي: _______
+
+نقاط القوة:
+1. _______
+2. _______
+3. _______
+
+مجالات التحسين:
+1. _______
+2. _______
+
+التوصيات:
+• _______
+• _______
+
+التوقيع: _______`,
+                
+                'activity': `نشاط صفي تفاعلي
+اسم النشاط: _______
+الهدف: _______
+المدة: _______ دقيقة
+
+الأدوات المطلوبة:
+• _______
+• _______
+
+خطوات التنفيذ:
+1. _______
+2. _______
+3. _______
+
+معايير التقييم:
+• _______
+• _______`,
+                
+                'email': `الموضوع: تحديث عن تقدم الطالب
+
+السادة أولياء أمور الطالب _______
+
+تحية طيبة وبعد،
+
+أود إعلامكم بأن _______
+
+نقاط التميز:
+• _______
+• _______
+
+مجالات تحتاج متابعة:
+• _______
+• _______
+
+نصائح للدعم المنزلي:
+1. _______
+2. _______
+
+للاستفسار، يمكنكم التواصل عبر _______
+
+مع خالص التحية،
+_______
+معلم المادة`
+            };
+            
+            document.getElementById('writingArea').value = templates[templateName] || '';
+        }
+        
+        // تحديات
+        function startChallenge(challengeNum) {
+            const challenges = {
+                1: "اكتب فقرة (150 كلمة على الأقل) عن 'أهمية التعليم التفاعلي في تنمية مهارات التفكير النقدي لدى الطلاب'. ركز على أمثلة عملية يمكن تطبيقها في الصف.",
+                2: "صمم خطة درس كاملة لموضوع 'الكسور' للصف الرابع الابتدائي. تأكد من تضمين أهداف تعليمية واضحة، أنشطة تفاعلية، ووسائل تقييم متنوعة."
+            };
+            
+            document.getElementById('writingArea').value = challenges[challengeNum] || '';
+            alert(`بدأت التحدي ${challengeNum}! لديك 30 دقيقة لإكماله.`);
+        }
+        
+        // حفظ وفتح المسودات
+        function saveDraft() {
+            const text = document.getElementById('writingArea').value;
+            if (text.trim()) {
+                localStorage.setItem('writing_draft', text);
+                localStorage.setItem('writing_draft_date', new Date().toISOString());
+                alert('✅ تم حفظ المسودة بنجاح');
+            }
+        }
+        
+        function loadDraft() {
+            const saved = localStorage.getItem('writing_draft');
+            if (saved) {
+                document.getElementById('writingArea').value = saved;
+                const date = new Date(localStorage.getItem('writing_draft_date'));
+                alert(`تم تحميل المسودة المحفوظة بتاريخ: ${date.toLocaleDateString('ar-EG')}`);
+            } else {
+                alert('لا توجد مسودات محفوظة');
+            }
+        }
+        
+        function downloadText() {
+            const text = document.getElementById('writingArea').value;
+            if (!text.trim()) {
+                alert('اكتب نصاً أولاً للتحميل');
+                return;
+            }
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `نص-كتابتي-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // التقدم
+        function updateProgress() {
+            const completed = JSON.parse(localStorage.getItem('writing_exercises') || '0');
+            const progress = (completed / 10) * 100;
+            document.getElementById('writingProgress').style.width = `${progress}%`;
+            document.getElementById('exercisesNeeded').textContent = 10 - completed;
+        }
+        
+        // تحديث عند التحميل
+        document.addEventListener('DOMContentLoaded', updateProgress);
+    </script>
+</body>
+</html>
