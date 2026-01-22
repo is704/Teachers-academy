@@ -1,1 +1,563 @@
-# الاستماع 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارة الاستماع - أكاديمية الأساتذة</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .listening-container {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .listening-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .listening-header h1 {
+            font-size: 2.5rem;
+            color: #4facfe;
+            margin-bottom: 20px;
+        }
+        
+        .audio-player {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .audio-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .audio-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .audio-btn.primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .audio-btn.secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .exercise-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .transcript-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .highlight {
+            background: yellow;
+            padding: 2px;
+            border-radius: 3px;
+        }
+        
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: #4facfe;
+            border: 2px solid #4facfe;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .difficulty-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .easy { background: #d4edda; color: #155724; }
+        .medium { background: #fff3cd; color: #856404; }
+        .hard { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <!-- زر العودة -->
+    <a href="../index.html" class="back-btn">
+        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+    </a>
+
+    <div class="listening-container">
+        <div class="container">
+            <!-- العنوان الرئيسي -->
+            <div class="listening-header">
+                <div class="skill-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-headphones"></i>
+                </div>
+                <h1>مهارة الاستماع الفعال</h1>
+                <p class="subtitle">طور قدرتك على الاستماع النشط والاستيعاب العميق للمحتوى المسموع</p>
+            </div>
+
+            <!-- مشغل الصوت -->
+            <div class="audio-player">
+                <h2><i class="fas fa-play-circle"></i> المحتوى الحالي
+                    <span class="difficulty-tag easy" id="currentDifficulty">سهل</span>
+                </h2>
+                <p id="audioTitle">نصائح للمعلم الجديد في أول يوم دراسي</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="audioProgress"></div>
+                </div>
+                
+                <div class="time-display">
+                    <span id="currentTime">00:00</span>
+                    <span id="duration">02:30</span>
+                </div>
+                
+                <div class="audio-controls">
+                    <button class="audio-btn primary" onclick="playAudio()" id="playBtn">
+                        <i class="fas fa-play"></i> تشغيل
+                    </button>
+                    <button class="audio-btn secondary" onclick="pauseAudio()">
+                        <i class="fas fa-pause"></i> إيقاف
+                    </button>
+                    <button class="audio-btn secondary" onclick="restartAudio()">
+                        <i class="fas fa-redo"></i> إعادة
+                    </button>
+                    <button class="audio-btn secondary" onclick="changeAudio()">
+                        <i class="fas fa-random"></i> تغيير
+                    </button>
+                    <button class="audio-btn secondary" onclick="toggleTranscript()">
+                        <i class="fas fa-file-alt"></i> النص
+                    </button>
+                </div>
+                
+                <!-- التحكم في الصوت -->
+                <div style="margin-top: 20px;">
+                    <label for="volumeControl"><i class="fas fa-volume-up"></i> مستوى الصوت:</label>
+                    <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.7" style="width: 100%;">
+                </div>
+            </div>
+
+            <!-- تمارين الاستماع -->
+            <div class="listening-exercises">
+                <h2><i class="fas fa-dumbbell"></i> تمارين الاستماع</h2>
+                
+                <div class="exercises-grid">
+                    <div class="exercise-card">
+                        <h4><i class="fas fa-brain"></i> التلخيص السمعي</h4>
+                        <p>استمع ثم لخص المحتوى في 3 جمل</p>
+                        <button class="audio-btn secondary" onclick="startSummarizingExercise()">ابدأ التمرين</button>
+                        <textarea id="audioSummary" placeholder="اكتب ملخصك هنا..." style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;"></textarea>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h4><i class="fas fa-question-circle"></i> أسئلة التفاصيل</h4>
+                        <p>اجب على أسئلة محددة بعد الاستماع</p>
+                        <button class="audio-btn secondary" onclick="startDetailQuestions()">ابدأ الأسئلة</button>
+                        <div id="detailQuestions" style="margin-top: 10px;"></div>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h4><i class="fas fa-assistive-listening-systems"></i> تمييز الأصوات</h4>
+                        <p>تدرب على تمييز الأصوات والنبرات المختلفة</p>
+                        <button class="audio-btn secondary" onclick="startSoundDiscrimination()">ابدأ التمرين</button>
+                        <div id="soundExercise" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- النص المكتوب -->
+            <div class="transcript-section" id="transcriptSection" style="display: none;">
+                <h3><i class="fas fa-scroll"></i> النص المكتوب</h3>
+                <p id="transcriptText">
+                    مرحباً بكم في هذه المحاضرة عن نصائح للمعلم الجديد. أول يوم دراسي هو الأهم في علاقتك مع الطلاب. إليكم أهم النصائح:
+                    
+                    1. كن مستعداً: جهز جميع المواد مقدماً، وتأكد من معرفتك بخطة الدرس.
+                    2. قدم نفسك: عرف الطلاب على نفسك باختصار، واشرح توقعاتك بوضوح.
+                    3. استمع أكثر: في اليوم الأول، استمع لطلابك لتفهم توقعاتهم وخلفياتهم.
+                    4. كن مرناً: خطط الدرس قد تتغير حسب تفاعل الطلاب، كن مستعداً للتعديل.
+                    5. اخلق بيئة آمنة: شجع الطلاب على المشاركة دون خوف من الخطأ.
+                    
+                    تذكر: الانطباع الأول يدوم، لذا اجعله إيجابياً ومشجعاً للتعلم.
+                </p>
+            </div>
+
+            <!-- مكتبة التسجيلات -->
+            <div class="audio-library" style="margin-top: 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h2><i class="fas fa-music"></i> مكتبة التسجيلات</h2>
+                <p>اختر تسجيلاً للتدريب:</p>
+                
+                <div class="audio-grid">
+                    <div class="audio-item" onclick="loadAudio('first-day')">
+                        <h4>نصائح أول يوم دراسي <span class="difficulty-tag easy">سهل</span></h4>
+                        <p>2:30 دقيقة - للمعلمين الجدد</p>
+                    </div>
+                    
+                    <div class="audio-item" onclick="loadAudio('class-management')">
+                        <h4>إدارة الصف الفعالة <span class="difficulty-tag medium">متوسط</span></h4>
+                        <p>4:15 دقيقة - تقنيات الإدارة</p>
+                    </div>
+                    
+                    <div class="audio-item" onclick="loadAudio('motivation')">
+                        <h4>تحفيز الطلاب <span class="difficulty-tag hard">متقدم</span></h4>
+                        <p>3:45 دقيقة - استراتيجيات التحفيز</p>
+                    </div>
+                    
+                    <div class="audio-item" onclick="loadAudio('assessment')">
+                        <h4>التقويم التربوي <span class="difficulty-tag medium">متوسط</span></h4>
+                        <p>5:20 دقيقة - أنواع التقويم</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تقدم الاستماع -->
+            <div class="progress-section" style="margin-top: 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h2><i class="fas fa-chart-line"></i> تقدمك في الاستماع</h2>
+                <div class="progress-bar" style="height: 10px; background: #e9ecef; border-radius: 5px; overflow: hidden;">
+                    <div class="progress-fill" id="listeningProgress" style="height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe); width: 0%;"></div>
+                </div>
+                <p style="margin-top: 10px;">استمع لـ <span id="minutesNeeded">30</span> دقيقة أخرى لترتقي للمستوى التالي!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // مكتبة التسجيلات
+        const audioLibrary = {
+            'first-day': {
+                title: 'نصائح للمعلم الجديد في أول يوم دراسي',
+                transcript: `مرحباً بكم في هذه المحاضرة عن نصائح للمعلم الجديد. أول يوم دراسي هو الأهم في علاقتك مع الطلاب. إليكم أهم النصائح:
+                
+                1. كن مستعداً: جهز جميع المواد مقدماً، وتأكد من معرفتك بخطة الدرس.
+                2. قدم نفسك: عرف الطلاب على نفسك باختصار، واشرح توقعاتك بوضوح.
+                3. استمع أكثر: في اليوم الأول، استمع لطلابك لتفهم توقعاتهم وخلفياتهم.
+                4. كن مرناً: خطط الدرس قد تتغير حسب تفاعل الطلاب، كن مستعداً للتعديل.
+                5. اخلق بيئة آمنة: شجع الطلاب على المشاركة دون خوف من الخطأ.
+                
+                تذكر: الانطباع الأول يدوم، لذا اجعله إيجابياً ومشجعاً للتعلم.`,
+                duration: 150, // ثانية
+                difficulty: 'easy',
+                questions: [
+                    {
+                        question: "ما هي النصيحة الأولى للمعلم الجديد؟",
+                        options: ["كن مرناً", "كن مستعداً", "استمع أكثر", "قدم نفسك"],
+                        answer: 1
+                    },
+                    {
+                        question: "لماذا يعتبر اليوم الأول مهماً؟",
+                        options: [
+                            "لأنه يحدد الانطباع الأول",
+                            "لأنه أطول يوم",
+                            "لأنه يحتاج لمعدات كثيرة",
+                            "لأنه يوم اختبار"
+                        ],
+                        answer: 0
+                    }
+                ]
+            },
+            'class-management': {
+                title: 'تقنيات إدارة الصف الفعالة',
+                transcript: `إدارة الصف الفعالة هي مهارة أساسية لكل معلم ناجح. إليكم أهم التقنيات:
+                
+                1. وضع القواعد الواضحة: حدد التوقعات منذ اليوم الأول.
+                2. التنظيم المكاني: رتب الصف بطريقة تسهل التفاعل والمراقبة.
+                3. التواصل البصري: حافظ على التواصل البصري مع جميع الطلاب.
+                4. التعزيز الإيجابي: اشجع السلوك الجيد بدلاً من معاقبة السلوك السيء فقط.
+                5. التنويع في الأنشطة: تغيير النشاط كل 15-20 دقيقة يحافظ على الانتباه.
+                
+                المفتاح هو الثبات في التطبيق والمرونة في الأسلوب.`,
+                duration: 255,
+                difficulty: 'medium',
+                questions: [
+                    {
+                        question: "ما أهمية التنويع في الأنشطة؟",
+                        options: [
+                            "لزيادة الواجبات",
+                            "للحفاظ على انتباه الطلاب",
+                            "لتسهيل التصحيح",
+                            "لاختبار المعلم"
+                        ],
+                        answer: 1
+                    }
+                ]
+            }
+        };
+        
+        // متغيرات مشغل الصوت
+        let currentAudio = 'first-day';
+        let audioDuration = 150;
+        let currentTime = 0;
+        let isPlaying = false;
+        let audioInterval;
+        
+        // تحميل تسجيل
+        function loadAudio(audioId) {
+            currentAudio = audioId;
+            const audio = audioLibrary[audioId];
+            
+            document.getElementById('audioTitle').textContent = audio.title;
+            document.getElementById('transcriptText').textContent = audio.transcript;
+            document.getElementById('currentDifficulty').textContent = 
+                audio.difficulty === 'easy' ? 'سهل' : 
+                audio.difficulty === 'medium' ? 'متوسط' : 'متقدم';
+            document.getElementById('currentDifficulty').className = `difficulty-tag ${audio.difficulty}`;
+            
+            audioDuration = audio.duration;
+            updateDurationDisplay();
+            
+            // إعادة تعيين المشغل
+            resetPlayer();
+        }
+        
+        // تشغيل الصوت
+        function playAudio() {
+            if (isPlaying) {
+                pauseAudio();
+                return;
+            }
+            
+            isPlaying = true;
+            document.getElementById('playBtn').innerHTML = '<i class="fas fa-pause"></i> إيقاف';
+            
+            audioInterval = setInterval(() => {
+                currentTime++;
+                updateProgress();
+                
+                if (currentTime >= audioDuration) {
+                    finishAudio();
+                }
+            }, 1000);
+            
+            // حفظ التقدم
+            startListeningSession();
+        }
+        
+        function pauseAudio() {
+            isPlaying = false;
+            clearInterval(audioInterval);
+            document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> تشغيل';
+        }
+        
+        function restartAudio() {
+            currentTime = 0;
+            updateProgress();
+            if (isPlaying) {
+                pauseAudio();
+                playAudio();
+            }
+        }
+        
+        function changeAudio() {
+            const audios = Object.keys(audioLibrary);
+            const randomAudio = audios[Math.floor(Math.random() * audios.length)];
+            loadAudio(randomAudio);
+        }
+        
+        function toggleTranscript() {
+            const section = document.getElementById('transcriptSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // تحديث العرض
+        function updateProgress() {
+            const progress = (currentTime / audioDuration) * 100;
+            document.getElementById('audioProgress').style.width = `${progress}%`;
+            
+            // تحديث الوقت
+            const currentMinutes = Math.floor(currentTime / 60);
+            const currentSeconds = currentTime % 60;
+            document.getElementById('currentTime').textContent = 
+                `${currentMinutes.toString().padStart(2, '0')}:${currentSeconds.toString().padStart(2, '0')}`;
+        }
+        
+        function updateDurationDisplay() {
+            const minutes = Math.floor(audioDuration / 60);
+            const seconds = audioDuration % 60;
+            document.getElementById('duration').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function resetPlayer() {
+            currentTime = 0;
+            updateProgress();
+            if (isPlaying) {
+                pauseAudio();
+                document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> تشغيل';
+            }
+        }
+        
+        function finishAudio() {
+            pauseAudio();
+            alert('🎧 أكملت الاستماع بنجاح!');
+            
+            // حفظ التقدم
+            if (typeof window.progressSystem !== 'undefined') {
+                window.progressSystem.completeExercise('listening');
+                updateProgress();
+            }
+        }
+        
+        // التحكم في الصوت
+        document.getElementById('volumeControl').addEventListener('input', function() {
+            // في تطبيق حقيقي، هذا يتحكم في حجم الصوت
+            console.log('مستوى الصوت:', this.value);
+        });
+        
+        // تمارين الاستماع
+        function startSummarizingExercise() {
+            alert('استمع للتسجيل ثم اكتب ملخصاً في المربع أدناه. اضغط "تشغيل" لبدء التسجيل.');
+        }
+        
+        function startDetailQuestions() {
+            const audio = audioLibrary[currentAudio];
+            const container = document.getElementById('detailQuestions');
+            
+            container.innerHTML = '';
+            
+            audio.questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.style.marginBottom = '15px';
+                questionDiv.innerHTML = `
+                    <p><strong>سؤال ${index + 1}:</strong> ${q.question}</p>
+                    ${q.options.map((option, optIndex) => `
+                        <label style="display: block; margin: 5px 0;">
+                            <input type="radio" name="detailQ${index}" value="${optIndex}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                `;
+                container.appendChild(questionDiv);
+            });
+            
+            const checkBtn = document.createElement('button');
+            checkBtn.className = 'audio-btn secondary';
+            checkBtn.innerHTML = '<i class="fas fa-check"></i> تصحيح الإجابات';
+            checkBtn.onclick = checkDetailAnswers;
+            container.appendChild(checkBtn);
+        }
+        
+        function checkDetailAnswers() {
+            const audio = audioLibrary[currentAudio];
+            let correct = 0;
+            
+            audio.questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="detailQ${index}"]:checked`);
+                if (selected && parseInt(selected.value) === q.answer) {
+                    correct++;
+                }
+            });
+            
+            alert(`🎯 حصلت على ${correct}/${audio.questions.length} إجابة صحيحة!`);
+        }
+        
+        // التتبع والتحليل
+        function startListeningSession() {
+            const session = {
+                audio: currentAudio,
+                startTime: new Date().toISOString(),
+                duration: audioDuration
+            };
+            
+            let sessions = JSON.parse(localStorage.getItem('listening_sessions') || '[]');
+            sessions.push(session);
+            if (sessions.length > 50) sessions = sessions.slice(-50);
+            localStorage.setItem('listening_sessions', JSON.stringify(sessions));
+            
+            // تحديث الإحصائيات
+            updateListeningStats();
+        }
+        
+        function updateListeningStats() {
+            const sessions = JSON.parse(localStorage.getItem('listening_sessions') || '[]');
+            const totalMinutes = sessions.reduce((sum, session) => sum + (session.duration / 60), 0);
+            
+            const needed = 30 - Math.floor(totalMinutes);
+            document.getElementById('minutesNeeded').textContent = needed > 0 ? needed : 0;
+            
+            const progress = Math.min(100, (totalMinutes / 30) * 100);
+            document.getElementById('listeningProgress').style.width = `${progress}%`;
+        }
+        
+        function updateProgress() {
+            updateListeningStats();
+        }
+        
+        // تهيئة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAudio('first-day');
+            updateListeningStats();
+            
+            // التحكم في الصوت
+            const volumeControl = document.getElementById('volumeControl');
+            volumeControl.addEventListener('input', function() {
+                // محاكاة تغيير الصوت
+                console.log('مستوى الصوت:', this.value);
+            });
+        });
+    </script>
+</body>
+</html>
